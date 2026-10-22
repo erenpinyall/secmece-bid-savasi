@@ -1,0 +1,461 @@
+{
+ "hayvan": [
+  {
+   "name": "Aslan",
+   "file": "aslan.jpg",
+   "src": "zaten var"
+  },
+  {
+   "name": "Fil",
+   "file": "fil.jpg",
+   "src": "zaten var"
+  },
+  {
+   "name": "Timsah",
+   "file": "timsah.jpg",
+   "src": "zaten var"
+  },
+  {
+   "name": "Kartal",
+   "file": "kartal.jpg",
+   "src": "zaten var"
+  },
+  {
+   "name": "Kurt",
+   "file": "kurt.jpg",
+   "src": "zaten var"
+  },
+  {
+   "name": "Boğa",
+   "file": "boga.jpg",
+   "src": "zaten var"
+  },
+  {
+   "name": "Kobra",
+   "file": "kobra.jpg",
+   "src": "zaten var"
+  },
+  {
+   "name": "Akrep",
+   "file": "akrep.jpg",
+   "src": "zaten var"
+  },
+  {
+   "name": "Arı Sürüsü",
+   "file": "ari-surusu.jpg",
+   "src": "zaten var"
+  },
+  {
+   "name": "Penguen",
+   "file": "penguen.jpg",
+   "src": "zaten var"
+  }
+ ],
+ "dino": [
+  {
+   "name": "T-Rex",
+   "file": "t-rex.jpg",
+   "src": "zaten var"
+  },
+  {
+   "name": "Spinozor",
+   "file": "spinozor.jpg",
+   "src": "zaten var"
+  },
+  {
+   "name": "Mosasaurus",
+   "file": "mosasaurus.jpg",
+   "src": "zaten var"
+  },
+  {
+   "name": "Velociraptor",
+   "file": "velociraptor.jpg",
+   "src": "zaten var"
+  },
+  {
+   "name": "Indoraptor",
+   "file": "indoraptor.webp",
+   "src": "wiki:Dinosaurs in Jurassic Park"
+  },
+  {
+   "name": "Triceratops",
+   "file": "triceratops.jpg",
+   "src": "wiki:Triceratops"
+  },
+  {
+   "name": "Ankylosaurus",
+   "file": "ankylosaurus.jpg",
+   "src": "wiki:Ankylosaurus"
+  },
+  {
+   "name": "Brachiosaurus",
+   "file": "brachiosaurus.jpg",
+   "src": "wiki:Brachiosaurus"
+  },
+  {
+   "name": "Pteranodon",
+   "file": "pteranodon.jpg",
+   "src": "wiki:Pteranodon"
+  },
+  {
+   "name": "Dino Yumurtası",
+   "file": "dino-yumurtasi.jpg",
+   "src": "wiki:Dinosaur egg"
+  }
+ ],
+ "kahraman": [
+  {
+   "name": "Süpermen",
+   "file": "supermen.png",
+   "src": "wiki:Superman"
+  },
+  {
+   "name": "Thanos",
+   "file": "thanos.png",
+   "src": "wiki:Thanos"
+  },
+  {
+   "name": "Hulk",
+   "file": "hulk.png",
+   "src": "zaten var"
+  },
+  {
+   "name": "Thor",
+   "file": "thor.png",
+   "src": "zaten var"
+  },
+  {
+   "name": "Batman",
+   "file": "batman.jpg",
+   "src": "zaten var"
+  },
+  {
+   "name": "Iron Man",
+   "file": "iron-man.png",
+   "src": "zaten var"
+  },
+  {
+   "name": "Flash",
+   "file": "flash.jpg",
+   "src": "zaten var"
+  },
+  {
+   "name": "Wonder Woman",
+   "file": "wonder-woman.jpg",
+   "src": "zaten var"
+  },
+  {
+   "name": "Joker",
+   "file": "joker.jpg",
+   "src": "zaten var"
+  },
+  {
+   "name": "Örümcek Adam",
+   "file": "orumcek-adam.png",
+   "src": "wiki:Spider-Man"
+  }
+ ],
+ "oyun": [
+  {
+   "name": "Kratos",
+   "file": "kratos.png",
+   "src": "wiki:Kratos (God of War)"
+  },
+  {
+   "name": "Bowser",
+   "file": "bowser.png",
+   "src": "zaten var"
+  },
+  {
+   "name": "Link",
+   "file": "link.png",
+   "src": "zaten var"
+  },
+  {
+   "name": "Master Chief",
+   "file": "master-chief.png",
+   "src": "wiki:Master Chief (Halo)"
+  },
+  {
+   "name": "Mario",
+   "file": "mario.png",
+   "src": "wiki:Mario"
+  },
+  {
+   "name": "Sonic",
+   "file": "sonic.png",
+   "src": "zaten var"
+  },
+  {
+   "name": "Pikachu",
+   "file": "pikachu.png",
+   "src": "wiki:Pikachu"
+  },
+  {
+   "name": "Steve",
+   "file": "steve.png",
+   "src": "wiki:Steve (Minecraft)"
+  },
+  {
+   "name": "Kirby",
+   "file": "kirby.png",
+   "src": "zaten var"
+  },
+  {
+   "name": "Pac-Man",
+   "file": "pac-man.png",
+   "src": "zaten var"
+  }
+ ],
+ "futbol": [
+  {
+   "name": "Messi",
+   "file": "messi.jpg",
+   "src": "zaten var"
+  },
+  {
+   "name": "Ronaldo",
+   "file": "ronaldo.jpg",
+   "src": "zaten var"
+  },
+  {
+   "name": "Maradona",
+   "file": null
+  },
+  {
+   "name": "Pelé",
+   "file": "pel.jpg",
+   "src": "wiki:Pelé"
+  },
+  {
+   "name": "Zidane",
+   "file": "zidane.jpg",
+   "src": "zaten var"
+  },
+  {
+   "name": "Ronaldinho",
+   "file": null
+  },
+  {
+   "name": "Mbappé",
+   "file": "mbapp.jpg",
+   "src": "zaten var"
+  },
+  {
+   "name": "Haaland",
+   "file": null
+  },
+  {
+   "name": "Neymar",
+   "file": "neymar.jpg",
+   "src": "zaten var"
+  },
+  {
+   "name": "Buffon",
+   "file": "buffon.jpg",
+   "src": "zaten var"
+  }
+ ],
+ "yemek": [
+  {
+   "name": "Lahmacun",
+   "file": "lahmacun.jpg",
+   "src": "zaten var"
+  },
+  {
+   "name": "Baklava",
+   "file": "baklava.png",
+   "src": "zaten var"
+  },
+  {
+   "name": "Adana Kebap",
+   "file": null
+  },
+  {
+   "name": "İskender",
+   "file": "i-skender.jpg",
+   "src": "wiki:İskender kebap"
+  },
+  {
+   "name": "Döner",
+   "file": "doner.jpg",
+   "src": "wiki:Doner kebab"
+  },
+  {
+   "name": "Mantı",
+   "file": "manti.jpg",
+   "src": "wiki:Manti (food)"
+  },
+  {
+   "name": "Pizza",
+   "file": "pizza.jpg",
+   "src": "zaten var"
+  },
+  {
+   "name": "Hamburger",
+   "file": "hamburger.jpg",
+   "src": "zaten var"
+  },
+  {
+   "name": "Profiterol",
+   "file": "profiterol.jpg",
+   "src": "wiki:Profiterole"
+  },
+  {
+   "name": "Sushi",
+   "file": "sushi.jpg",
+   "src": "wiki:Sushi"
+  }
+ ],
+ "meme": [
+  {
+   "name": "Chuck Norris",
+   "file": "chuck-norris.jpg",
+   "src": "wiki:Chuck Norris"
+  },
+  {
+   "name": "Shrek",
+   "file": "shrek.png",
+   "src": "wiki:Shrek (character)"
+  },
+  {
+   "name": "Rickroll",
+   "file": "rickroll.jpg",
+   "src": "zaten var"
+  },
+  {
+   "name": "GigaChad",
+   "file": "gigachad.webp",
+   "src": "zaten var"
+  },
+  {
+   "name": "Doge",
+   "file": "doge.jpg",
+   "src": "wiki:Doge (meme)"
+  },
+  {
+   "name": "Trollface",
+   "file": "trollface.jpg",
+   "src": "zaten var"
+  },
+  {
+   "name": "Among Us",
+   "file": "among-us.jpg",
+   "src": "wiki:Among Us"
+  },
+  {
+   "name": "Kermit",
+   "file": "kermit.jpg",
+   "src": "wiki:Kermit the Frog"
+  },
+  {
+   "name": "Skibidi Toilet",
+   "file": "skibidi-toilet.png",
+   "src": "zaten var"
+  },
+  {
+   "name": "Ağlayan Kedi",
+   "file": "aglayan-kedi.jpg",
+   "src": "zaten var"
+  }
+ ],
+ "mitoloji": [
+  {
+   "name": "Zeus",
+   "file": "zeus.jpg",
+   "src": "zaten var"
+  },
+  {
+   "name": "Odin",
+   "file": null
+  },
+  {
+   "name": "Poseidon",
+   "file": null
+  },
+  {
+   "name": "Hades",
+   "file": null
+  },
+  {
+   "name": "Thor",
+   "file": "thor.jpg",
+   "src": "zaten var"
+  },
+  {
+   "name": "Anubis",
+   "file": "anubis.png",
+   "src": "zaten var"
+  },
+  {
+   "name": "Medusa",
+   "file": null
+  },
+  {
+   "name": "Loki",
+   "file": null
+  },
+  {
+   "name": "Minotauros",
+   "file": "minotauros.jpg",
+   "src": "commons:File:Tondo Minotaur London E4 MAN.jpg"
+  },
+  {
+   "name": "Pegasus",
+   "file": "pegasus.jpg",
+   "src": "zaten var"
+  }
+ ],
+ "film": [
+  {
+   "name": "Harry Potter",
+   "file": "harry-potter.jpg",
+   "src": "wiki:Harry Potter (character)"
+  },
+  {
+   "name": "Darth Vader",
+   "file": "darth-vader.jpg",
+   "src": "zaten var"
+  },
+  {
+   "name": "Gandalf",
+   "file": "gandalf.jpg",
+   "src": "zaten var"
+  },
+  {
+   "name": "Terminatör",
+   "file": "terminator.png",
+   "src": "zaten var"
+  },
+  {
+   "name": "Neo",
+   "file": "neo.jpg",
+   "src": "wiki:Neo (The Matrix)"
+  },
+  {
+   "name": "Rocky",
+   "file": "rocky.jpg",
+   "src": "wiki:Rocky Balboa"
+  },
+  {
+   "name": "Jack Sparrow",
+   "file": "jack-sparrow.jpg",
+   "src": "wiki:Jack Sparrow"
+  },
+  {
+   "name": "Indiana Jones",
+   "file": "indiana-jones.jpg",
+   "src": "wiki:Indiana Jones (character)"
+  },
+  {
+   "name": "Katniss",
+   "file": "katniss.jpg",
+   "src": "zaten var"
+  },
+  {
+   "name": "Willy Wonka",
+   "file": "willy-wonka.jpg",
+   "src": "wiki:Willy Wonka"
+  }
+ ]
+}

@@ -1,0 +1,376 @@
+{
+ "naruto": [
+  {
+   "label": "Naruto",
+   "file": "narutonaruto.png",
+   "anilistName": "Naruto Uzumaki"
+  },
+  {
+   "label": "Itachi",
+   "file": "itachiitachi.png",
+   "anilistName": "Itachi Uchiha"
+  },
+  {
+   "label": "Madara",
+   "file": "madaramadara.png",
+   "anilistName": "Madara Uchiha [NARUTO: Shippuuden]",
+   "late": true
+  },
+  {
+   "label": "Sasuke",
+   "file": "sasukesasuke.png",
+   "anilistName": "Sasuke Uchiha"
+  },
+  {
+   "label": "Minato",
+   "file": "minatominato.png",
+   "anilistName": "Minato Namikaze [NARUTO]",
+   "late": true
+  },
+  {
+   "label": "Kakashi",
+   "file": "kakashikakashi.png",
+   "anilistName": "Kakashi Hatake"
+  },
+  {
+   "label": "Gaara",
+   "file": "gaaragaara.png",
+   "anilistName": "Gaara"
+  },
+  {
+   "label": "Jiraiya",
+   "file": "jiraiyajiraiya.png",
+   "anilistName": "Jiraiya"
+  },
+  {
+   "label": "Rock Lee",
+   "file": "rock-leerock-lee.png",
+   "anilistName": "Rock Lee"
+  },
+  {
+   "label": "Sakura",
+   "file": "sakurasakura.png",
+   "anilistName": "Sakura Haruno"
+  }
+ ],
+ "bleach": [
+  {
+   "label": "Ichigo",
+   "file": "ichigoichigo.png",
+   "anilistName": "Ichigo Kurosaki"
+  },
+  {
+   "label": "Aizen",
+   "file": "aizenaizen.png",
+   "anilistName": "Sousuke Aizen"
+  },
+  {
+   "label": "Kenpachi",
+   "file": "kenpachikenpachi.jpg",
+   "anilistName": "Kenpachi Zaraki"
+  },
+  {
+   "label": "Ulquiorra",
+   "file": "ulquiorraulquiorra.png",
+   "anilistName": "Ulquiorra Cifer"
+  },
+  {
+   "label": "Byakuya",
+   "file": "byakuyabyakuya.png",
+   "anilistName": "Byakuya Kuchiki"
+  },
+  {
+   "label": "Urahara",
+   "file": "uraharaurahara.png",
+   "anilistName": "Kisuke Urahara"
+  },
+  {
+   "label": "Yoruichi",
+   "file": "yoruichiyoruichi.png",
+   "anilistName": "Yoruichi Shihouin"
+  },
+  {
+   "label": "Hitsugaya",
+   "file": "hitsugayahitsugaya.jpg",
+   "anilistName": "Toushirou Hitsugaya"
+  },
+  {
+   "label": "Chad",
+   "file": "chadchad.jpg",
+   "anilistName": "Yasutora Sado"
+  },
+  {
+   "label": "Rukia",
+   "file": "rukiarukia.png",
+   "anilistName": "Rukia Kuchiki"
+  }
+ ],
+ "onepiece": [
+  {
+   "label": "Luffy",
+   "file": "luffyluffy.png",
+   "anilistName": "Luffy Monkey [ONE PIECE]",
+   "late": true
+  },
+  {
+   "label": "Shanks",
+   "file": "shanksshanks.png",
+   "anilistName": "Shanks"
+  },
+  {
+   "label": "Kaido",
+   "file": "kaidokaido.png",
+   "anilistName": "Kaidou",
+   "late": true
+  },
+  {
+   "label": "Zoro",
+   "file": "zorozoro.png",
+   "anilistName": "Zoro Roronoa"
+  },
+  {
+   "label": "Blackbeard",
+   "file": "blackbeardblackbeard.jpg",
+   "anilistName": "Teach Marshall",
+   "late": true
+  },
+  {
+   "label": "Law",
+   "file": "lawlaw.jpg",
+   "anilistName": "Law Trafalgar"
+  },
+  {
+   "label": "Ace",
+   "file": "aceace.jpg",
+   "anilistName": "Ace Portgas"
+  },
+  {
+   "label": "Sanji",
+   "file": "sanjisanji.png",
+   "anilistName": "Sanji"
+  },
+  {
+   "label": "Nami",
+   "file": "naminami.png",
+   "anilistName": "Nami"
+  },
+  {
+   "label": "Chopper",
+   "file": "chopperchopper.jpg",
+   "anilistName": "Chopper Tony Tony"
+  }
+ ],
+ "dragonball": [
+  {
+   "label": "Goku",
+   "file": "gokugoku.png",
+   "anilistName": "Gokuu Son [Dragon Ball]",
+   "late": true
+  },
+  {
+   "label": "Broly",
+   "file": "brolybroly.png",
+   "anilistName": "Broly [Dragon Ball Z: Moetsukiro!! Nessen - Ressen - Chou Gekisen]",
+   "late": true
+  },
+  {
+   "label": "Vegeta",
+   "file": "vegetavegeta.png",
+   "anilistName": "Vegeta"
+  },
+  {
+   "label": "Frieza",
+   "file": "friezafrieza.png",
+   "anilistName": "Freeza"
+  },
+  {
+   "label": "Cell",
+   "file": "cellcell.jpg",
+   "anilistName": "Cell"
+  },
+  {
+   "label": "Majin Buu",
+   "file": "majin-buumajin-buu.jpg",
+   "anilistName": "Majin Boo [Dragon Ball GT]",
+   "late": true
+  },
+  {
+   "label": "Gohan",
+   "file": "gohangohan.png",
+   "anilistName": "Gohan Son"
+  },
+  {
+   "label": "Trunks",
+   "file": "trunkstrunks.png",
+   "anilistName": "Trunks"
+  },
+  {
+   "label": "Piccolo",
+   "file": "piccolopiccolo.jpg",
+   "anilistName": "Piccolo"
+  },
+  {
+   "label": "Krillin",
+   "file": "krillinkrillin.jpg",
+   "anilistName": "Kuririn"
+  }
+ ],
+ "titan": [
+  {
+   "label": "Levi",
+   "file": "levilevi.png",
+   "anilistName": "Levi"
+  },
+  {
+   "label": "Eren",
+   "file": "ereneren.jpg",
+   "anilistName": "Eren Yeager"
+  },
+  {
+   "label": "Kolosal Titan",
+   "file": null
+  },
+  {
+   "label": "Mikasa",
+   "file": "mikasamikasa.png",
+   "anilistName": "Mikasa Ackerman"
+  },
+  {
+   "label": "Erwin",
+   "file": "erwinerwin.png",
+   "anilistName": "Erwin Smith"
+  },
+  {
+   "label": "Reiner",
+   "file": "reinerreiner.png",
+   "anilistName": "Reiner Braun"
+  },
+  {
+   "label": "Zeke",
+   "file": null
+  },
+  {
+   "label": "Annie",
+   "file": "annieannie.jpg",
+   "anilistName": "Annie Leonhart"
+  },
+  {
+   "label": "Armin",
+   "file": "arminarmin.png",
+   "anilistName": "Armin Arlert"
+  },
+  {
+   "label": "Bertholdt",
+   "file": "bertholdtbertholdt.jpg",
+   "anilistName": "Bertolt Hoover"
+  }
+ ],
+ "jujutsu": [
+  {
+   "label": "Gojo",
+   "file": "gojogojo.png",
+   "anilistName": "Satoru Gojou"
+  },
+  {
+   "label": "Sukuna",
+   "file": "sukunasukuna.png",
+   "anilistName": "Sukuna"
+  },
+  {
+   "label": "Yuji",
+   "file": "yujiyuji.png",
+   "anilistName": "Yuuji Itadori"
+  },
+  {
+   "label": "Megumi",
+   "file": "megumimegumi.png",
+   "anilistName": "Megumi Fushiguro"
+  },
+  {
+   "label": "Nobara",
+   "file": "nobaranobara.png",
+   "anilistName": "Nobara Kugisaki"
+  },
+  {
+   "label": "Toji",
+   "file": "tojitoji.jpg",
+   "anilistName": "Touji Fushiguro [Jujutsu Kaisen]",
+   "late": true
+  },
+  {
+   "label": "Geto",
+   "file": "getogeto.png",
+   "anilistName": "Suguru Getou"
+  },
+  {
+   "label": "Maki",
+   "file": "makimaki.png",
+   "anilistName": "Maki Zenin"
+  },
+  {
+   "label": "Nanami",
+   "file": "nanaminanami.png",
+   "anilistName": "Kento Nanami"
+  },
+  {
+   "label": "Yuta",
+   "file": "yutayuta.jpg",
+   "anilistName": "Yuuta Okkotsu",
+   "late": true
+  }
+ ],
+ "demonslayer": [
+  {
+   "label": "Tanjiro",
+   "file": "tanjirotanjiro.png",
+   "anilistName": "Tanjirou Kamado"
+  },
+  {
+   "label": "Nezuko",
+   "file": "nezukonezuko.png",
+   "anilistName": "Nezuko Kamado"
+  },
+  {
+   "label": "Zenitsu",
+   "file": "zenitsuzenitsu.png",
+   "anilistName": "Zenitsu Agatsuma"
+  },
+  {
+   "label": "Inosuke",
+   "file": "inosukeinosuke.jpg",
+   "anilistName": "Inosuke Hashibira"
+  },
+  {
+   "label": "Giyu",
+   "file": "giyugiyu.png",
+   "anilistName": "Giyuu Tomioka"
+  },
+  {
+   "label": "Rengoku",
+   "file": "rengokurengoku.png",
+   "anilistName": "Kyoujurou Rengoku"
+  },
+  {
+   "label": "Akaza",
+   "file": "akazaakaza.png",
+   "anilistName": "Akaza [Kimetsu no Yaiba]",
+   "late": true
+  },
+  {
+   "label": "Muzan",
+   "file": "muzanmuzan.jpg",
+   "anilistName": "Muzan Kibutsuji"
+  },
+  {
+   "label": "Shinobu",
+   "file": "shinobushinobu.png",
+   "anilistName": "Shinobu Kochou"
+  },
+  {
+   "label": "Doma",
+   "file": "domadoma.png",
+   "anilistName": "Douma [Kimetsu no Yaiba]",
+   "late": true
+  }
+ ]
+}

@@ -1,0 +1,144 @@
+{
+ "hxh": [
+  {
+   "label": "Gon",
+   "file": "gon.jpg",
+   "anilistName": "Gon Freecss"
+  },
+  {
+   "label": "Killua",
+   "file": "killua.jpg",
+   "anilistName": "Killua Zoldyck"
+  },
+  {
+   "label": "Kurapika",
+   "file": "kurapika.png",
+   "anilistName": "Kurapika"
+  },
+  {
+   "label": "Leorio",
+   "file": "leorio.jpg",
+   "anilistName": "Leorio Paradinight"
+  },
+  {
+   "label": "Hisoka",
+   "file": "hisoka.png",
+   "anilistName": "Hisoka Morow"
+  },
+  {
+   "label": "Chrollo",
+   "file": "chrollo.jpg",
+   "anilistName": "Chrollo Lucilfer"
+  },
+  {
+   "label": "Meruem",
+   "file": "meruem.png",
+   "anilistName": "Meruem"
+  },
+  {
+   "label": "Netero",
+   "file": "netero.jpg",
+   "anilistName": "Isaac Netero"
+  },
+  {
+   "label": "Ging",
+   "file": "ging.jpg",
+   "anilistName": "Ging Freecss"
+  },
+  {
+   "label": "Biscuit",
+   "file": "biscuit.png",
+   "anilistName": "Biscuit Krueger"
+  }
+ ],
+ "mha": [
+  {
+   "label": "Deku",
+   "file": "deku.png",
+   "anilistName": "Izuku Midoriya"
+  },
+  {
+   "label": "Bakugo",
+   "file": "bakugo.png",
+   "anilistName": "Katsuki Bakugou"
+  },
+  {
+   "label": "Todoroki",
+   "file": "todoroki.png",
+   "anilistName": "Shouto Todoroki"
+  },
+  {
+   "label": "All Might",
+   "file": null
+  },
+  {
+   "label": "Shigaraki",
+   "file": "shigaraki.jpg",
+   "anilistName": "Tomura Shigaraki"
+  },
+  {
+   "label": "Aizawa",
+   "file": "aizawa.png",
+   "anilistName": "Shouta Aizawa"
+  },
+  {
+   "label": "Endeavor",
+   "file": null
+  },
+  {
+   "label": "Hawks",
+   "file": null
+  },
+  {
+   "label": "Dabi",
+   "file": null
+  },
+  {
+   "label": "Uraraka",
+   "file": "uraraka.png",
+   "anilistName": "Ochako Uraraka"
+  }
+ ],
+ "csm": [
+  {
+   "label": "Denji",
+   "file": null
+  },
+  {
+   "label": "Makima",
+   "file": null
+  },
+  {
+   "label": "Power",
+   "file": null
+  },
+  {
+   "label": "Aki",
+   "file": null
+  },
+  {
+   "label": "Pochita",
+   "file": null
+  },
+  {
+   "label": "Reze",
+   "file": null
+  },
+  {
+   "label": "Himeno",
+   "file": null
+  },
+  {
+   "label": "Kishibe",
+   "file": null
+  },
+  {
+   "label": "Beam",
+   "file": null
+  },
+  {
+   "label": "Angel",
+   "file": null
+  }
+ ]
+}

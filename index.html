@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SEÇMECE ⚔️ Takım Savaşı</title>
+<meta name="description" content="Açık artırma savaşı: Terminatör mü, Aslan mı? Kartları kap, takımını kur, 2 cihazdan oyna!" />
+<meta name="theme-color" content="#ffffff" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="bg" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+  <div id="confetti-layer" aria-hidden="true"></div>
+  <div id="toasts" class="toasts"></div>
+
+  <!-- ================= KURULUM ================= -->
+  <section id="screen-setup" class="screen active">
+    <header class="hero">
+      <div class="hero-badge">KARŞILIKLI TEKLİF · 2 CİHAZ DESTEKLİ</div>
+      <h1 class="hero-title">SEÇ<span>MECE</span></h1>
+      <p class="hero-sub">Kart gelir, teklifi görürsün, üstüne artırırsın ya da pas dersin.<br>Her turda takım başına en fazla <b>5 kart</b> — tur bitince sayaç sıfırlanır! 🎴<br><small>🎭 <b>Kör Bid</b> modu: kartlar gizli, sadece ipucu! · 📦 Dev kadrolardan her tur <b>rastgele 10 kart</b> ✨</small></p>
+      <button class="btn ghost small" id="btnRules1">❓ Nasıl oynanır?</button>
+    </header>
+
+    <div class="glass setup-panel">
+      <h2 class="sec-title">👥 Takımlar <small class="sec-note">(tek cihazda oynuyorsanız ikisini de doldurun — online'da herkes kendi adını kendi cihazında yazar)</small></h2>
+      <div class="team-setup">
+        <div class="team-card red">
+          <div class="tc-head"><span class="tc-dot"></span> 1. TAKIM</div>
+          <div class="tc-row">
+            <select class="team-avatar" id="team0avatar"></select>
+            <input id="team0name" maxlength="16" placeholder="Takım adı" value="Kırmızı Takım" />
+          </div>
+          <input id="team0members" maxlength="70" placeholder="Oyuncular (virgülle): Ali, Ayşe, Ömer" />
+        </div>
+        <div class="team-card blue">
+          <div class="tc-head"><span class="tc-dot"></span> 2. TAKIM</div>
+          <div class="tc-row">
+            <select class="team-avatar" id="team1avatar"></select>
+            <input id="team1name" maxlength="16" placeholder="Takım adı" value="Mavi Takım" />
+          </div>
+          <input id="team1members" maxlength="70" placeholder="Oyuncular (virgülle): Deniz, Ece, Kaan" />
+        </div>
+      </div>
+
+      <h2 class="sec-title">⚙️ Maç Ayarları</h2>
+      <div class="settings-row">
+        <label class="set-item">🔁 Tur
+          <select id="roundsSel">
+            <option value="1">1 tur</option>
+            <option value="2">2 tur</option>
+            <option value="3" selected>3 tur</option>
+            <option value="4">4 tur</option>
+            <option value="5">5 tur</option>
+          </select>
+        </label>
+        <label class="set-item">💰 Tur başı para
+          <input id="roundMoney" type="number" min="5" max="100" value="20" />
+        </label>
+        <div class="set-item">🎮 Oyun Modu
+          <span class="mode-row">
+            <button type="button" class="mode-btn" data-mode="classic">🎴 Klasik</button>
+            <button type="button" class="mode-btn" data-mode="blind">🎭 Kör Bid</button>
+          </span>
+        </div>
+      </div>
+
+      <div class="setup-head">
+        <h2 class="sec-title">🎯 Evren Paketleri</h2>
+        <div class="setup-actions">
+          <button id="btnNewPack" class="btn ghost small">➕ Yeni Paket Yarat</button>
+          <button id="btnAllPacks" class="btn ghost small">Tümünü Seç</button>
+          <button id="btnNoPacks" class="btn ghost small">Hiçbiri</button>
+        </div>
+      </div>
+      <div class="pack-grid" id="packGrid"></div>
+      <p class="setup-hint" id="packSummary"></p>
+
+      <div class="start-actions">
+        <button id="btnStart" class="btn primary big">📱 TEK CİHAZDA BAŞLAT</button>
+        <button id="btnHost" class="btn ghost big">🌐 ODA KUR <small>(2 cihaz)</small></button>
+        <button id="btnJoin" class="btn ghost big">🔑 ODAYA KATIL</button>
+      </div>
+      <p class="setup-hint">Online modda arkadaşın kendi telefonundan/bilgisayarından odaya katılır — teklifleri canlı görür, karşılıklı artırırsınız.</p>
+    </div>
+  </section>
+
+  <!-- ================= OYUN ================= -->
+  <section id="screen-game" class="screen">
+    <div class="topbar glass">
+      <div class="pbar p0" id="pbar0"></div>
+      <div class="center-info">
+        <div class="room-chip hidden" id="roomChip"><span class="conn-dot" id="connDot"></span>ODA <b id="roomCode">----</b></div>
+        <div class="round-pill" id="roundPill">TUR 1/3 · KART 1/10</div>
+        <div class="tools">
+          <button class="icon-btn" id="btnMute" title="Ses aç/kapat">🔊</button>
+          <button class="icon-btn" id="btnRules2" title="Kurallar">❓</button>
+        </div>
+      </div>
+      <div class="pbar p1" id="pbar1"></div>
+    </div>
+
+    <div class="scorebar-wrap glass">
+      <span class="pb-side red" id="pbRed">0 🎴</span>
+      <div class="scorebar"><div class="pb-red" id="pbRedBar"></div><div class="pb-blue" id="pbBlueBar"></div></div>
+      <span class="pb-side blue" id="pbBlue">0 🎴</span>
+    </div>
+
+    <div class="arena">
+      <div class="stage glass">
+        <div class="stage-status" id="stageStatus">Hazırlanıyor…</div>
+        <div class="card-slot" id="cardSlot"></div>
+        <div class="bid-area" id="bidArea"></div>
+        <div class="reveal-area" id="revealArea"></div>
+      </div>
+      <aside class="log glass">
+        <h3>📜 Tur Kaydı</h3>
+        <div id="logList"></div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ================= SONUÇ ================= -->
+  <section id="screen-end" class="screen">
+    <div class="end-wrap">
+      <div class="end-banner glass" id="endBanner">…</div>
+      <div class="end-grid">
+        <div class="end-col glass" id="endCol0"></div>
+        <div class="end-vs">⚔️</div>
+        <div class="end-col glass" id="endCol1"></div>
+      </div>
+      <div class="end-actions">
+        <button id="btnRematch" class="btn primary big">🔁 Rövanş</button>
+        <button id="btnNewSetup" class="btn ghost big">🛠️ Yeni Kurulum</button>
+      </div>
+      <p class="setup-hint" id="endHint"></p>
+    </div>
+  </section>
+
+  <!-- ================= TUR GİRİŞİ ================= -->
+  <div id="roundIntro" class="overlay hidden">
+    <div class="overlay-box glass center">
+      <div class="ri-round" id="riRound">TUR 1/3</div>
+      <div class="ri-pack" id="riPackEmoji">🦁</div>
+      <h2 id="riPackName">HAYVANLAR</h2>
+      <div class="ri-blind hidden" id="riBlind">🎭 KÖR BİD</div>
+      <p id="riSub">…</p>
+      <button id="btnRoundGo" class="btn primary big">TURU BAŞLAT ▶</button>
+      <p class="setup-hint hidden" id="riWait">⏳ Host'un başlatması bekleniyor…</p>
+    </div>
+  </div>
+
+  <!-- ================= TUR ÖZETİ ================= -->
+  <div id="roundSummary" class="overlay hidden">
+    <div class="overlay-box glass center">
+      <h2 id="rsTitle">TUR 1 BİTTİ!</h2>
+      <div class="rs-grid">
+        <div class="rs-team red">
+          <b id="rsName0">…</b>
+          <span class="rs-gain" id="rsRound0">+0</span><small>kart bu tur</small>
+          <div id="rsCards0" class="rs-cards"></div>
+          <div class="rs-total" id="rsTotal0">Toplam: 0 kart</div>
+        </div>
+        <div class="vs">⚔️</div>
+        <div class="rs-team blue">
+          <b id="rsName1">…</b>
+          <span class="rs-gain" id="rsRound1">+0</span><small>kart bu tur</small>
+          <div id="rsCards1" class="rs-cards"></div>
+          <div class="rs-total" id="rsTotal1">Toplam: 0 kart</div>
+        </div>
+      </div>
+      <button id="btnRoundNext" class="btn primary big">SONRAKİ TUR ▶</button>
+      <p class="setup-hint hidden" id="rsWait">⏳ Host devam ediyor…</p>
+    </div>
+  </div>
+
+  <!-- ================= LOBI (ODA) ================= -->
+  <div id="lobby" class="overlay hidden">
+    <div class="overlay-box glass center">
+      <h2 id="lobbyTitle">🌐 Oda</h2>
+      <div id="lobbyCodeWrap" class="hidden">
+        <div class="lobby-code" id="lobbyCode">----</div>
+        <button id="btnCopyCode" class="btn ghost small">📋 Kodu Kopyala</button>
+      </div>
+      <div id="lobbyTeamPick" class="hidden">
+        <p>Sen hangi takımsın?</p>
+        <div class="team-pick">
+          <button id="pickRed" class="tp red">🔴 1. Takım</button>
+          <button id="pickBlue" class="tp blue">🔵 2. Takım</button>
+        </div>
+      </div>
+      <div id="lobbyStatus" class="lobby-status">…</div>
+      <div class="lobby-actions">
+        <button id="btnLobbyStart" class="btn primary big hidden">⚔️ SAVAŞI BAŞLAT</button>
+        <button id="btnLobbyLeave" class="btn ghost">🚪 Kapat</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= ODAYA KATIL ================= -->
+  <div id="joinRoom" class="overlay hidden">
+    <div class="overlay-box glass center">
+      <h2>🔑 Odaya Katıl</h2>
+      <input id="joinCode" maxlength="4" placeholder="KOD" class="join-code-input" autocomplete="off" />
+      <div class="join-row">
+        <select id="joinAvatar"></select>
+        <input id="joinName" maxlength="14" placeholder="Adın" />
+      </div>
+      <input id="joinTeamName" maxlength="16" placeholder="Takım adın (ör. Mavi Takım)" />
+      <p id="joinStatus" class="setup-hint">Kodu host'tan al — 4 karakter.</p>
+      <div class="lobby-actions">
+        <button id="btnJoinGo" class="btn primary big">🔗 KATIL</button>
+        <button id="btnJoinCancel" class="btn ghost">Vazgeç</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= PAKET EDİTÖRÜ ================= -->
+  <div id="packEditor" class="overlay hidden">
+    <div class="overlay-box glass pack-editor-box">
+      <h2 id="peTitle">✏️ Paketi Düzenle</h2>
+      <div class="pe-top">
+        <select id="peEmoji" class="pe-emoji"></select>
+        <input id="peName" maxlength="22" placeholder="Paket adı (ör. Benim Kahramanlarım)" />
+      </div>
+      <div id="peRows" class="pe-rows"></div>
+      <div class="pe-addrow">
+        <button id="peAddRow" class="btn ghost small">➕ Kart Ekle</button>
+        <button id="peReset" class="btn ghost small hidden">↺ Bu paketi sıfırla</button>
+      </div>
+      <p class="setup-hint">5–20 kart. Boş isimli kart kaydedilmez (atlanır). İstersen her karta bir <b>foto URL'si</b> ekle 🖼️</p>
+      <div class="pe-buttons">
+        <button id="peCancel" class="btn ghost">Vazgeç</button>
+        <button id="peSave" class="btn primary">💾 Kaydet</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= KURALLAR ================= -->
+  <div id="rules" class="overlay hidden">
+    <div class="overlay-box glass rules-box">
+      <h2>📖 Nasıl Oynanır?</h2>
+      <ul>
+        <li>🎴 Kart açılır. <b>Açılış sırası döner:</b> her kartta sırayla bir takım açar (sol → sağ → sol…), yeni turda sağ takım başlar. Açılışta <b>pas yok</b> — teklif vermek zorunlu! <b>İstisna:</b> rakip parasızsa açılışta <b>🎁 PAS</b> hakkın doğar.</li>
+        <li>👀 Rakip teklifi <b>görür</b> ve ya <b>üstüne artırır</b> ya da pas der. Sırayla böyle sürer.</li>
+        <li>Kim pas derse kart, son teklifi veren takımın olur ve <b>o parayı öder</b>.</li>
+        <li>🎁 <b>Kart asla çöpe gitmez:</b> iki taraf da ödeyemezse kart bedavaya kadrosu eksik olan takıma gider.</li>
+        <li>💰 Her tur kasalar yenilenir. Parayı bitiren <b>teklif veremez</b> — sırası gelince otomatik pas geçer; açılış sırası ona gelirse açılış anında rakibe geçer. İki taraf da ödeyemezse kart bedavaya, kadrosu eksik olana gider!</li>
+        <li>🎁 <b>Bağış pası:</b> rakip parasızken açılış sende olursa istersen <b>PAS</b> bas — kart bedavaya rakibe gider, senden para çıkmaz. Teklif verirsen parayı ödeyip kartı sen kaparsın. Böylece para gerçekten değerli!</li>
+        <li>🎭 <b>Kör Bid modu:</b> kartlar gizli gelir, sadece "nereden geldiği" ipucu görünür ("Konoha'dan biri 👀" gibi). Kazanana kadar kimse kimliği göremez — içinden efsane de çıkabilir, sıradan biri de!</li>
+        <li>📦 <b>Dev kadro:</b> paketlerde artık onlarca karakter var — her tur o paketten <b>rastgele 10 kart</b> seçilir. Aynı maç hiç tekrarlamaz gibi!</li>
+        <li>🎴 Her turda takım başına <b>en fazla 5 kart</b>. Bir takım 5'lediyse turun kalan kartları <b>teklifsiz, sırayla</b> diğer takıma gider — artık bid atılmaz. Kartlar bitince (ya da iki takım da 5'leyince) tur kapanır ve <b>yeni turda sayaç sıfırlanır</b>, yine 5 hakkı olur.</li>
+        <li>🖼️ <b>Tüm paketlerde</b> kartların gerçek fotoğrafları var (Naruto, One Piece, Hunter x Hunter, Batman, Messi, Lahmacun…). Kendi paketinde her karta istersen foto URL'si ekleyebilirsin.</li>
+        <li>🛠️ <b>Kendi paketini yarat</b>: istediğin karakterleri (mahalle, sınıf, kendi kahramanların…) ekleyip oynayabilirsin.</li>
+        <li>📱 <b>2 cihaz modu</b>: "Oda Kur" → 4 harflik kod çıkar → arkadaşın "Odaya Katıl"dan kodu girer. Herkes kendi cihazından oynar.</li>
+        <li>🎉 Maç sonunda kazanan/kaybeden yok — <b>takımların topladığı kartlar</b> sergilenir!</li>
+      </ul>
+      <button id="btnRulesClose" class="btn primary">Anladım 👍</button>
+    </div>
+  </div>
+
+  <script src="packs.js"></script>
+  <script src="mqtt.min.js"></script>
+  <script src="net.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
