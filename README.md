@@ -105,7 +105,8 @@ Toplam **26 paket / 1.308 kart**. Her kartın gerçek fotoğrafı vardır.
 ├── app.js          # Oyun motoru (bid akışı, turlar, render, online senkron)
 ├── packs.js        # PACK_DEFS: 26 paket ve 1.308 kart verisi
 ├── net.js          # MQTT tabanlı oda katmanı (çoklu broker + dedupe)
-├── mqtt.min.js     # MQTT.js tarayıcı sürümü (vendor)
+├── mqtt.min.js     # MQTT.js tarayıcı sürümü (vendor, sadece online odada yüklenir)
+├── vercel.json     # Statik dosya cache başlıkları
 └── img/            # Paket kart fotoğrafları (img/<paket>/<kart>.jpg)
 ```
 
@@ -166,7 +167,8 @@ Veya GitHub reposunu Vercel'e bağlayıp **Framework Preset: Other**, **Build Co
 
 - Oyun tamamen istemci tarafında çalışır; sunucuda tutulan bir veri yoktur.
 - Online mod public MQTT broker'larına bağlanır. Kurumsal/filtreli ağlarda bu bağlantılar engellenebilir; oyun bunu otomatik olarak yedek broker'larla aşmaya çalışır.
-- `img/` klasörü ~70 MB'dır; ilk yüklemede kart fotoğrafları tembel (`loading="lazy"`) yüklenir.
+- `img/` klasörü ~70 MB'dır; ilk yüklemede kart fotoğrafları tembel (`loading="lazy"`) yüklenir. Tekrar ziyaretlerde hızlı açılması için `vercel.json` görsellere 30 günlük cache verir.
+- **İlk açılış hızı:** Google Fonts artık render-blocking değil (font gecikirse/engellenirse sayfa sistem fontuyla hemen açılır) ve `mqtt.min.js` (~340 KB) yalnızca online oda kurulurken/katılırken yüklenir.
 
 ---
 

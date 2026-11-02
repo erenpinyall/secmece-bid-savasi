@@ -494,6 +494,7 @@ let ACT_PENDING = null, ACT_SEQ = 0, RETRY_TIMER = null, LAST_S = null;
 let curScreen = 'setup';
 let lastEventId = 0, endedShown = false, confettiDone = false;
 let uiCardKey = null, uiPanelSig = null, uiPhase = null, uiTopSig = null, uiLogSig = null;
+let uiEndSig = null, uiScoreSig = null;
 let bidDraft = null;   // {key, team, min, val} — panel yeniden çizilince eldeki tutar sıfırlanmasın
 
 /* ---------- küçük yardımcılar ---------- */
@@ -679,6 +680,7 @@ function beginMatch(cfg) {
   };
   endedShown = false; confettiDone = false; lastEventId = 0;
   uiCardKey = null; uiPanelSig = null; uiPhase = null; uiTopSig = null; uiLogSig = null;
+  uiEndSig = null; uiScoreSig = null;
   bidDraft = null; ACT_PENDING = null;
   ['#cardSlot', '#bidArea', '#revealArea', '#logList'].forEach(id => { const el = $(id); if (el) el.innerHTML = ''; });
   ['#roundIntro', '#roundSummary', '#lobby', '#joinRoom'].forEach(id => { const el = $(id); if (el) el.classList.add('hidden'); });
@@ -1097,6 +1099,9 @@ function renderTopbar(s) {
 
 function renderScorebar(s) {
   const a = s.teams[0].count, b = s.teams[1].count;
+  const sig = a + '|' + b;
+  if (sig === uiScoreSig) return;
+  uiScoreSig = sig;
   const total = a + b || 1;
   const rp = Math.round(a / total * 100);
   const r = $('#pbRed'), bl = $('#pbBlue'), rb = $('#pbRedBar'), bb = $('#pbBlueBar');
@@ -1345,6 +1350,11 @@ function renderEvents(s) {
 function renderEnd(s) {
   const e = s.endInfo;
   if (!e) return;
+  /* Online odada host her 2.5 sn'de durum yolluyor; maç bittiyse vitrini
+     baştan çizmeye gerek yok (onlarca fotoğraf yeniden yükleniyordu). */
+  const sig = e.counts.join(',') + '|' + s.teams.map(t => t.money + ':' + t.cards.length).join('|');
+  if (sig === uiEndSig) return;
+  uiEndSig = sig;
   const banner = $('#endBanner');
   if (banner) banner.innerHTML = '🎉 <b>MAÇ BİTTİ!</b><div class="banner-sub">İşte takımların vitrini 🎴</div>';
   for (let i = 0; i < 2; i++) {
@@ -1370,6 +1380,23 @@ function renderEnd(s) {
 /* ============================================================
    ONLINE ODA (MQTT)
    ============================================================ */
+/* mqtt.min.js (~340 KB) artık ilk yüklemede değil, online oda açılırken gelir.
+   Böylece site ilk açılışta bu dosyayı indirmek için beklemez. */
+let MQTT_PROMISE = null;
+function ensureMqtt() {
+  if (window.mqtt) return Promise.resolve(true);
+  if (MQTT_PROMISE) return MQTT_PROMISE;
+  MQTT_PROMISE = new Promise(resolve => {
+    const s = document.createElement('script');
+    s.src = 'mqtt.min.js';
+    s.async = true;
+    s.onload = () => resolve(!!window.mqtt);
+    s.onerror = () => { MQTT_PROMISE = null; resolve(false); };
+    document.head.appendChild(s);
+  });
+  return MQTT_PROMISE;
+}
+
 function setupNet(role, code) {
   NET = new window.Net.Room(role, code);
   NET.onStatus = onNetStatus;
@@ -1504,10 +1531,10 @@ function lobbySetStatus() {
 }
 function broadcastLobby() { if (MODE === 'host' && NET) NET.send({ t: 'state', s: lobbySnap() }); }
 
-function hostRoom() {
+async function hostRoom() {
   const cfg = cfgFromS();
   if (!cfg) return;
-  if (!window.Net || !window.Net.available()) { toast('🌐 Online mod için internet bağlantısı gerekiyor (mqtt yüklenemedi).', 'bad'); return; }
+  if (!window.Net) { toast('🌐 Online mod bu tarayıcıda desteklenmiyor.', 'bad'); return; }
   MODE = 'host';
   MY_TEAM = HOST_TEAM;
   ROOM_CODE = window.Net.makeCode();
@@ -1525,6 +1552,16 @@ function hostRoom() {
   if (rc) rc.classList.remove('hidden');
   if (rce) rce.textContent = ROOM_CODE;
   if (NET) { NET.stop(); NET = null; }
+  const st = $('#lobbyStatus');
+  if (st) st.innerHTML = '📡 Sunucuya bağlanılıyor…';
+  const myCode = ROOM_CODE;
+  const ok = await ensureMqtt();
+  if (MODE !== 'host' || ROOM_CODE !== myCode) return;   // kullanıcı beklerken vazgeçti / yeni oda açtı
+  if (!ok) {
+    if (st) st.innerHTML = '❌ Online mod için internet bağlantısı gerekiyor. "Kapat"a basıp tekrar dene.';
+    toast('🌐 Online mod için internet bağlantısı gerekiyor (MQTT yüklenemedi).', 'bad');
+    return;
+  }
   setupNet('host', ROOM_CODE);
   if (LOBBY_TIMER) clearInterval(LOBBY_TIMER);
   LOBBY_TIMER = setInterval(() => { if (MODE === 'host' && NET && !G) NET.send({ t: 'state', s: lobbySnap() }); }, 2500);
@@ -1541,14 +1578,16 @@ function lobbyStart() {
 }
 
 function openJoinRoom() {
-  if (!window.Net || !window.Net.available()) { toast('🌐 Online mod için internet bağlantısı gerekiyor (mqtt yüklenemedi).', 'bad'); return; }
+  if (!window.Net) { toast('🌐 Online mod bu tarayıcıda desteklenmiyor.', 'bad'); return; }
   const el = $('#joinRoom');
   if (el) el.classList.remove('hidden');
   const jc = $('#joinCode'); if (jc) jc.value = '';
+  const bg = $('#btnJoinGo'); if (bg) bg.disabled = false;
   setJoinStatus('Kodu host\'tan al — 4 karakter.');
+  ensureMqtt();   // kullanıcı kodu yazarken arka planda indir
 }
 function setJoinStatus(t) { const el = $('#joinStatus'); if (el) el.innerHTML = t; }
-function joinGo() {
+async function joinGo() {
   const jc = $('#joinCode');
   const code = (jc ? String(jc.value) : '').trim().toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 4);
   if (code.length !== 4) { setJoinStatus('⚠️ 4 karakterlik oda kodunu gir!'); return; }
@@ -1568,6 +1607,13 @@ function joinGo() {
   const rc = $('#roomChip'), rce = $('#roomCode');
   if (rc) rc.classList.remove('hidden');
   if (rce) rce.textContent = code;
+  const ok = await ensureMqtt();
+  if (MODE !== 'guest' || ROOM_CODE !== code) return;   // kullanıcı beklerken vazgeçti
+  if (!ok) {
+    setJoinStatus('❌ Online mod için internet bağlantısı gerekiyor. İnternetini kontrol et.');
+    if (bg) bg.disabled = false;
+    return;
+  }
   setupNet('guest', code);
   setTimeout(() => {
     if (MODE === 'guest' && !gameStateSeen) {
