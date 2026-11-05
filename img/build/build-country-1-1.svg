@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 448">
+<rect width="320" height="448" fill="#35291a"/>
+<path d="M20 65h280v318H20z M28 73h264v302H28z" fill="none" stroke="#ffd38a" opacity=".26"/>
+<path d="M42 140h236M42 306h236M160 86v24m0 228v24" stroke="#ffd38a" opacity=".34"/>
+<circle cx="160" cy="224" r="83" fill="none" stroke="#ffd38a" opacity=".24"/>
+<g transform="translate(70 132) scale(1.4)" stroke="#ffd38a" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" fill="none"><path d="M25 66h78c-4 25-19 31-39 31S29 91 25 66m23-15 7-14m10 14 7-14m10 14 7-14 M37 107h20m14 0h20"/></g>
+<text x="160" y="116" fill="#ffd38a" text-anchor="middle" font-size="16" font-family="sans-serif">Yemek</text>
+</svg>

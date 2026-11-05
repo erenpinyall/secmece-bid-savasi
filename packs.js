@@ -208,15 +208,15 @@ const PACK_DEFS = [
     ["🗡️","Mashiro Kuna",null,"img/bleach/mashiro-kuna.png",0.8]
   ] },
   { id: "onepiece", emoji: "🏴‍☠️", name: "One Piece", cards: [
-    ["🏴‍☠️","Luffy",9,"img/onepiece/luffy.png",2.8],
+    ["🏴‍☠️","Luffy",9,"img/onepiece/luffy-official.jpg",2.8],
     ["🏴‍☠️","Shanks",10,"img/onepiece/shanks.png",2.8],
     ["🏴‍☠️","Kaido",10,"img/onepiece/kaido.png",2.8],
-    ["🏴‍☠️","Zoro",9,"img/onepiece/zoro.png",2.8],
+    ["🏴‍☠️","Zoro",9,"img/onepiece/zoro-official.jpg",2.8],
     ["🏴‍☠️","Blackbeard",9,"img/onepiece/blackbeard.jpg",2.8],
     ["🏴‍☠️","Law",8,"img/onepiece/law.jpg",2.8],
     ["🏴‍☠️","Ace",8,"img/onepiece/ace.jpg",2.8],
     ["🏴‍☠️","Sanji",7,"img/onepiece/sanji.png",2.8],
-    ["🏴‍☠️","Nami",5,"img/onepiece/nami.png",2.8],
+    ["🏴‍☠️","Nami",5,"img/onepiece/nami-official.jpg",2.8],
     ["🏴‍☠️","Chopper",4,"img/onepiece/chopper.jpg",2.8],
     ["🏴‍☠️","Nico Robin",null,"img/onepiece/robin-nico.png",2.6],
     ["🏴‍☠️","Usopp",null,"img/onepiece/usopp.jpg",2],
@@ -323,6 +323,9 @@ const PACK_DEFS = [
     ["⚔️","Rico Brzenska",null,"img/titan/rico-brzenska.jpg",0.8],
     ["⚔️","Nanaba",null,"img/titan/nanaba.png",0.8],
     ["⚔️","Marlo Freudenberg",null,"img/titan/marlo-freudenberg.png",0.8],
+    ["⚔️","Falco Grice",null,"img/titan/falco-official.png",1.8],
+    ["⚔️","Gabi Braun",null,"img/titan/gabi-official.png",1.8],
+    ["⚔️","Pieck Finger",null,"img/titan/pieck-official.png",2.2],
     ["⚔️","Moblit Berner",null,"img/titan/moblit-berner.jpg",0.8]
   ] },
   { id: "jujutsu", emoji: "🌀", name: "Jujutsu Kaisen", cards: [
@@ -827,7 +830,7 @@ const PACK_DEFS = [
     ["🎬","R2-D2",null,"img/film/r2-d2.jpg",2.5],
     ["🎬","Obi-Wan",null,"img/film/obi-wan.png",2.5],
     ["🎬","Palpatine",null,"img/film/palpatine.png",2.5],
-    ["🎬","Anakin Skywalker",null,"img/film/anakin-skywalker.jpg",2.5],
+    ["🎬","Anakin Skywalker",null,"img/film/anakin-official.jpg",2.5],
     ["🎬","Kylo Ren",null,"img/film/kylo-ren.png",2.5],
     ["🎬","Gollum",null,"img/film/gollum.jpg",2.5],
     ["🎬","Sauron",null,"img/film/sauron.jpg",2.5],
@@ -1362,3 +1365,125 @@ const PACK_DEFS = [
     ["🕶️","Linel",null,"img/sao/linel.png",0.8]
   ] },
 ];
+
+// Kulüp seçkileri özgün paketlerdeki kartları ve görselleri paylaşır.
+const CLUB_SELECTIONS = [
+  {
+    id: 'club-2000s', name: '2000’ler Avrupa Gecesi', emoji: '⚽', pairs: [
+      ['futbol', 'Zidane', 'Ronaldinho', 'Maldini', 'Cannavaro', 'Casillas',
+        'Puyol', 'Raúl', "Eto'o", 'Drogba', 'Henry'],
+    ],
+  },
+  {
+    id: 'club-duos', name: 'Ezeli İkililer', emoji: '⚔️', pairs: [
+      ['naruto', 'Naruto', 'Sasuke'],
+      ['dragonball', 'Goku', 'Vegeta'],
+      ['kahraman', 'Batman', 'Joker'],
+      ['futbol', 'Messi', 'Ronaldo'],
+      ['futbolg', 'Mbappé', 'Haaland'],
+    ],
+  },
+  {
+    id: 'club-mix', name: 'Kulüp Gecesi', emoji: '🎴', pairs: [
+      ['onepiece', 'Luffy', 'Zoro', 'Nami'],
+      ['futbol', 'Ronaldinho', 'Zidane'],
+      ['oyun', 'Kratos', 'Mario', 'Geralt'],
+      ['lol', 'Jinx'],
+      ['naruto', 'Sakura'],
+    ],
+  },
+];
+
+for (const { id, name, emoji, pairs } of CLUB_SELECTIONS) {
+  const cards = pairs.flatMap(([packId, ...names]) => {
+    const pack = PACK_DEFS.find(pack => pack.id === packId);
+    return names.map(name => pack.cards.find(card => card[1] === name));
+  });
+  PACK_DEFS.push({ id, name, emoji, cards });
+}
+const BUILD_PACKS = [
+  {
+    id: 'build-shelter', name: 'Sığınağını Kur', emoji: '🛡️',
+    pitch: 'Dışarıda 30 günlük karantina var. Beş kartla içeride hayatı sürdür.',
+    roles: [
+      ['Barınak', 'Beton Yeraltı Sığınağı', 'Terk Edilmiş Metro'],
+      ['Erzak', '1.000 Kutu Konserve', '500 L Su + Filtre'],
+      ['Enerji', 'Güneş Paneli ve Akü', 'Dizel Jeneratör'],
+      ['Savunma', 'Av Tüfeği', 'Çelik Kapı ve Alarm'],
+      ['Sağlık', 'Saha Doktoru', 'İlk Yardım Deposu'],
+    ],
+  },
+  {
+    id: 'build-country', name: 'Ülkeni Kur', emoji: '🏛️',
+    pitch: 'Sınırda portal, bahçede burger ağacı. Beş kartla yaşamak isteyeceğin ülkeyi tasarla.',
+    roles: [
+      ['Ulaşım', 'Uçan Arabalar', 'Sıfır Yerçekimli Trenler'],
+      ['Yemek', 'Burger Veren Ağaçlar', 'Dondurma Nehirleri'],
+      ['Gündelik Hayat', 'Çalışma Zorunluluğu Yok', 'Her Hafta Dört Gün Tatil'],
+      ['Dünyaya Açılan Kapı', 'Başka Dünyalara Portallar', 'Okyanus Altında Komşu Ülke'],
+      ['Ülkenin Kuralı', 'Ayda Bir Ücretsiz Dilek', 'Her Tartışma Dansla Çözülür'],
+    ],
+  },
+  {
+    id: 'build-space', name: 'Mars Üssünü Kur', emoji: '🚀',
+    pitch: 'İkmal gelene kadar Mars’ta kalacaksın. Üssün neyle ayakta duracak?',
+    roles: [
+      ['Barınak', 'Yeraltı Lav Tüneli', 'Basınçlı Yaşam Modülü'],
+      ['Yaşam Desteği', 'Oksijen Üreticisi', 'Su Geri Dönüşüm Sistemi'],
+      ['Gıda', 'Hidroponik Sera', 'Altı Aylık Erzak'],
+      ['Enerji', 'Mini Nükleer Reaktör', 'Güneş Tarlası'],
+      ['Lojistik', 'Kargo Roverı', 'Yedek Parça Yazıcısı'],
+    ],
+  },
+  {
+    id: 'build-moto', name: 'Motorunu Tasarla', emoji: '🏍️',
+    pitch: 'Pist mi, toprak mı? Beş parçayı topla ve kendi motosikletini ortaya çıkar.',
+    roles: [
+      ['Motor', 'Çift Silindirli Motor', 'Dört Silindirli Motor'],
+      ['Şasi', 'Çelik Kafes Şasi', 'Alüminyum Şasi'],
+      ['Lastik', 'Pist Lastiği', 'Dişli Arazi Lastiği'],
+      ['Süspansiyon', 'Sert Pist Süspansiyonu', 'Uzun Mesafe Süspansiyonu'],
+      ['Fren', 'Çift Disk Fren', 'ABS Fren Sistemi'],
+    ],
+  },
+  {
+    id: 'build-city', name: 'Tuhaf Şehrini Tasarla', emoji: '🌆',
+    pitch: 'İş çıkışı gökyüzüne çıkabileceğin bir şehir hayal et. Beş kartla mahallelerini şekillendir.',
+    roles: [
+      ['Evler', 'Bulutların Üstünde Evler', 'Yürüyen Apartmanlar'],
+      ['Toplu Taşıma', 'Dev Kaplumbağa Tramvayı', 'Şehri Dolaşan Su Kaydırağı'],
+      ['Kamusal Alan', 'Her Gece Başka Yerde Park', 'Ayda Mahalle Pazarı'],
+      ['Hava Durumu', 'İsteğe Göre Kar Yağışı', 'Sadece Parklara Yağmur'],
+      ['Mahalle Kuralı', 'Apartman Aidatı Kurabiyeyle', 'Pazar Günü Korna Yerine Müzik'],
+    ],
+  },
+  {
+    id: 'build-school', name: 'Hayalindeki Okul', emoji: '🎒',
+    pitch: 'Bu okulda müfredatı sen yazıyorsun. Beş kartla öğrencilerin nasıl bir gün geçireceğini belirle.',
+    roles: [
+      ['Ders', 'Ejderha Sürüş Dersi', 'Rüyada Yabancı Dil Dersi'],
+      ['Teneffüs', 'Yerçekimsiz Oyun Alanı', 'Uzayan Teneffüs Düğmesi'],
+      ['Kantin', 'Sınırsız Pizza Kantini', 'Menüsü Ruh Haline Göre Kantin'],
+      ['Sınav', 'Sınav Yerine Boss Savaşı', 'Sınav Yerine Takım Macerası'],
+      ['Okul Kuralı', 'Pijamayla Okula Gelmek Serbest', 'Ödevleri Robotlar Yapıyor'],
+    ],
+  },
+  {
+    id: 'build-fest', name: 'Festival Gecesi', emoji: '🎸',
+    pitch: 'Kapılar birazdan açılıyor. Seyirciye unutulmaz bir gece yaşatacak beş kartı kap.',
+    roles: [
+      ['Mekân', 'Sahil Sahnesi', 'Eski Fabrika'],
+      ['Ana Konser', 'Rock Grubu', 'Elektronik Müzik İkilisi'],
+      ['Ses', 'Ana Sahne Hoparlörleri', 'Çevresel Ses Sistemi'],
+      ['Yemek', 'Sokak Lezzetleri Sokağı', 'Gece Kahvaltısı'],
+      ['Final', 'Drone Gösterisi', 'Sürpriz Konuk'],
+    ],
+  },
+];
+
+for (const { id, name, emoji, roles } of BUILD_PACKS) {
+  const cards = roles.flatMap(([, ...items], role) =>
+    items.map((item, variant) => [emoji, item, null, 'img/build/' + id + '-' + role + '-' + variant + '.svg', 1])
+  );
+  PACK_DEFS.push({ id, name, emoji, cards });
+}
