@@ -6,6 +6,8 @@ Tek cihazda sırayla (hot-seat) ya da **2 ayrı cihazda online** oynanabilir. He
 
 🔗 **Canlı demo:** <https://secmece-bid-savasi.vercel.app>
 
+![Seçmece — Takım Savaşı önizleme](docs/preview.webp)
+
 ---
 
 ## 📖 Nasıl oynanır?
