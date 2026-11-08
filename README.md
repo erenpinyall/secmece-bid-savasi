@@ -14,7 +14,7 @@ Tek cihazda sırayla (hot-seat) ya da **2 ayrı cihazda online** oynanabilir. He
 
 1. **Takımları hazırla:** takım adı, avatar ve oyuncuları gir (online modda herkes kendi adını kendi cihazında yazar).
 2. **Maç ayarları:** tur sayısı (1–5), tur başı bütçe (5–100) ve oyun modu (Klasik / Kör Bid).
-3. **Evren paketlerini seç:** 26 hazır paket veya kendi yarattığın paketler.
+3. **Evren paketlerini seç:** 36 hazır paket veya kendi yarattığın paketler.
 4. **Oyna:** her turda o paketten rastgele 10 kart gelir. Kart açılır, takımlar sırayla teklif verir.
 
 ### Temel kurallar
@@ -32,14 +32,14 @@ Tek cihazda sırayla (hot-seat) ya da **2 ayrı cihazda online** oynanabilir. He
 
 ## 📦 Evren paketleri
 
-Toplam **26 paket / 1.308 kart**. Her kartın gerçek fotoğrafı vardır.
+Toplam **36 paket / 1.411 kart**: 26 fotoğraflı evren paketi (1.311 kart), 3 kulüp seçkisi (30 kart) ve 7 senaryo paketi (70 SVG kart). Her evren kartının gerçek fotoğrafı vardır; senaryo kartları özel SVG illüstrasyonlarla gelir.
 
 | Paket | Kart | Paket | Kart |
 |---|---:|---|---:|
 | 🦁 Hayvanlar | 61 | 🦖 Dinozorlar | 37 |
 | 🍥 Naruto | 50 | 🗡️ Bleach | 50 |
 | 🏴‍☠️ One Piece | 50 | 🐉 Dragon Ball | 35 |
-| ⚔️ Attack on Titan | 27 | 🌀 Jujutsu Kaisen | 36 |
+| ⚔️ Attack on Titan | 30 | 🌀 Jujutsu Kaisen | 36 |
 | 👺 Demon Slayer | 40 | 🎣 Hunter x Hunter | 48 |
 | 🎓 My Hero Academia | 50 | 🪚 Chainsaw Man | 17 |
 | 🦸 Süper Kahramanlar | 51 | 🎮 Oyun Dünyası | 46 |
@@ -50,14 +50,24 @@ Toplam **26 paket / 1.308 kart**. Her kartın gerçek fotoğrafı vardır.
 | 🧚 Fairy Tail | 51 | 👊 One-Punch Man | 35 |
 | 🩸 Tokyo Ghoul | 31 | 🕶️ Sword Art Online | 34 |
 
+**Kulüp seçkileri ve senaryolar:**
+
+| Paket | Kart | Paket | Kart |
+|---|---:|---|---:|
+| ⚽ 2000’ler Avrupa Gecesi | 10 | ⚔️ Ezeli İkililer | 10 |
+| 🎴 Kulüp Gecesi | 10 | 🛡️ Sığınağını Kur | 10 |
+| 🏛️ Ülkeni Kur | 10 | 🚀 Mars Üssünü Kur | 10 |
+| 🏍️ Motorunu Tasarla | 10 | 🌆 Tuhaf Şehrini Tasarla | 10 |
+| 🎒 Hayalindeki Okul | 10 | 🎸 Festival Gecesi | 10 |
+
 **Ağırlıklı seçim:** her kartın bir ağırlığı vardır; ana kadro karakterleri daha sık, arka plan karakterleri daha seyrek çıkar (Efraimidis–Spirakis ağırlıklı rastgele seçim). Dev kadrolu paketlerde her tur o paketten **rastgele 10 kart** seçilir ve aynı maçta kartlar mümkün olduğunca tekrar etmez.
 
 ---
 
 ## 🌐 2 cihazda online
 
-- Bir cihaz **ODA KUR**'a basar → 4 haneli oda kodu çıkar.
-- Diğer cihaz **ODAYA KATIL**'a basıp kodu, adını ve takım adını girer.
+- Bir cihaz **Oda kur**'a basar → 4 karakterlik oda kodu çıkar.
+- Diğer cihaz **Odaya katıl**'a basıp kodu, adını ve takım adını girer.
 - Herkes kendi cihazından oynar; teklifler canlı senkronize olur.
 
 **Nasıl çalışıyor?**
@@ -76,7 +86,8 @@ Toplam **26 paket / 1.308 kart**. Her kartın gerçek fotoğrafı vardır.
 - 🎴 Klasik ve **Kör Bid** modu
 - 🌐 2 cihazda online oda (kod ile, hesapsız)
 - 📱 Tek cihazda sırayla oynama (hot-seat)
-- 📦 26 evren paketi, 1.308 fotoğraflı kart, ağırlıklı rastgele seçim
+- 📦 36 paket, 1.411 kart: 26 fotoğraflı evren, 3 kulüp seçkisi ve 7 senaryo paketi
+- 🔎 Paket arama, kategori filtreleri ve oda kurarken paket seçici
 - 🛠️ **Kendi paketini yarat** (uygulama içinden, foto URL'si ile)
 - 💾 Takım/ayar/paket seçimi `localStorage`'da saklanır (`secmece-v3`)
 - 🎭 Kör Bid ipuçları (pakete göre "nereden geldiği")
@@ -105,9 +116,11 @@ Toplam **26 paket / 1.308 kart**. Her kartın gerçek fotoğrafı vardır.
 ├── index.html      # Tüm ekranlar (kurulum, oyun, lobi, sonuç) + kurallar
 ├── styles.css      # Tema, animasyonlar, responsive düzen
 ├── app.js          # Oyun motoru (bid akışı, turlar, render, online senkron)
-├── packs.js        # PACK_DEFS: 26 paket ve 1.308 kart verisi
+├── packs.js        # PACK_DEFS: 36 paket ve 1.411 kart verisi
 ├── net.js          # MQTT tabanlı oda katmanı (çoklu broker + dedupe)
 ├── mqtt.min.js     # MQTT.js tarayıcı sürümü (vendor, sadece online odada yüklenir)
+├── club-display.ttf # Kulüp başlıkları için özel yazı tipi
+├── favicon.svg     # Site ikonu
 ├── vercel.json     # Statik dosya cache başlıkları
 └── img/            # Paket kart fotoğrafları (img/<paket>/<kart>.jpg)
 ```
