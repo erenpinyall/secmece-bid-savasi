@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 448">
+<rect width="320" height="448" fill="#38294b"/>
+<path d="M20 65h280v318H20z M28 73h264v302H28z" fill="none" stroke="#ddc0ff" opacity=".26"/>
+<path d="M42 140h236M42 306h236M160 86v24m0 228v24" stroke="#ddc0ff" opacity=".34"/>
+<circle cx="160" cy="224" r="83" fill="none" stroke="#ddc0ff" opacity=".24"/>
+<g transform="translate(70 132) scale(1.4)" stroke="#ddc0ff" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" fill="none"><path d="M26 39c16-5 26-4 38 6 12-10 22-11 38-6v53c-16-5-26-4-38 6-12-10-22-11-38-6zM64 45v53 M37 107h54"/></g>
+<text x="160" y="116" fill="#ddc0ff" text-anchor="middle" font-size="16" font-family="sans-serif">Ders</text>
+</svg>

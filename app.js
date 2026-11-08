@@ -260,7 +260,7 @@ const S = {
   rounds: 3,
   roundMoney: 20,
   mode: 'classic',
-  selected: PACK_DEFS.map(p => p.id),
+  selected: [],
   customs: [],
   overrides: {},
 };
@@ -278,12 +278,6 @@ function loadSetup() {
     if (o.mode === 'blind' || o.mode === 'classic') S.mode = o.mode;
     if (Array.isArray(o.customs)) S.customs = o.customs.filter(p => p && p.id && Array.isArray(p.cards) && p.cards.length >= 5);
     if (o.overrides && typeof o.overrides === 'object') S.overrides = o.overrides;
-    const ids = allPacks().map(p => p.id);
-    if (Array.isArray(o.selected)) S.selected = o.selected.filter(id => ids.includes(id));
-    /* eski (bu sürüm öncesi) kayıtlarda yeni eklenen paketler otomatik seçili gelsin */
-    if (Array.isArray(o.selected) && !o.knownIds) {
-      ['jujutsu', 'demonslayer', 'hxh', 'mha', 'csm', 'blackclover', 'fairytail', 'opm', 'tokyoghoul', 'sao'].forEach(id => { if (ids.includes(id) && !S.selected.includes(id)) S.selected.push(id); });
-    }
   } catch (e) {}
 }
 
@@ -314,33 +308,130 @@ const CARD_CAP = 5;   // takım başına HER TURDA en fazla kart (tur bitince sa
 /* ============================================================
    KURULUM EKRANI
    ============================================================ */
+let packCategory = '';
+const PACK_PAGE_SIZE = 6;
+let packLimit = PACK_PAGE_SIZE;
+const featuredPackInfo = {
+  'build-country': ['Burger Veren Ağaçlar', 'Burger ağaçları, uçan arabalar ve portallar.'],
+  titan: ['Levi', 'Keşif Birliği ve Marley savaşçıları aynı masada.'],
+  futbol: ['Messi', 'Messi, Pelé, Zidane ve diğer futbol efsaneleri.'],
+};
+let featuredIds = Object.keys(featuredPackInfo);
+let featuredQueue = [];
+const animePacks = new Set(['naruto', 'bleach', 'onepiece', 'dragonball', 'titan',
+  'jujutsu', 'demonslayer', 'hxh', 'mha', 'csm', 'blackclover', 'fairytail',
+  'opm', 'tokyoghoul', 'sao']);
+function categoryForPack(p) {
+  if (!p.builtin) return 'other';
+  if (p.id.startsWith('build-')) return 'build';
+  if (p.id.startsWith('club-')) return 'club';
+  if (animePacks.has(p.id)) return 'anime';
+  if (p.id.startsWith('futbol')) return 'football';
+  if (p.id === 'oyun' || p.id === 'lol') return 'games';
+  return 'other';
+}
+function togglePack(id) {
+  sfx('click');
+  S.selected = S.selected.includes(id) ? S.selected.filter(x => x !== id) : [...S.selected, id];
+  saveSetup();
+  renderPackGrid();
+}
+const scenarioCovers = {
+  'build-shelter': 'img/covers/shelter.jpg',
+  'build-country': 'img/covers/country.jpg',
+  'build-space': 'img/covers/space.jpg',
+  'build-moto': 'img/covers/moto.jpg',
+  'build-city': 'img/covers/city.jpg',
+  'build-school': 'img/covers/school.jpg',
+  'build-fest': 'img/covers/fest.jpg',
+};
+function packCover(pack) {
+  const [coverName] = featuredPackInfo[pack.id] || [];
+  return scenarioCovers[pack.id]
+    || pack.cards.find(card => card.name === coverName && card.img)?.img
+    || pack.cards.find(card => card.img)?.img;
+}
+function packArt(pack) {
+  const cover = packCover(pack);
+  const emoji = esc(pack.emoji);
+  return cover
+    ? `<img src="${esc(cover)}" alt="" loading="lazy" data-fb="${emoji}" />`
+    : `<span>${emoji}</span>`;
+}
+function renderFeaturedPacks(packs) {
+  const featured = $('#featuredPacks');
+  featured.innerHTML = featuredIds.map(id => {
+    const pack = packs.find(pack => pack.id === id);
+    if (!pack) return '';
+    const description = featuredPackInfo[id]?.[1] || `${pack.cards.length} kart`;
+    return `<button type="button" class="featured-pack" data-pack-choice="${esc(id)}" aria-pressed="${S.selected.includes(id)}">
+      <span class="featured-art" aria-hidden="true">${packArt(pack)}</span>
+      <span class="featured-copy"><strong>${esc(pack.name)}</strong><small>${description}</small></span>
+      <span class="featured-check" aria-hidden="true">✓</span>
+    </button>`;
+  }).join('');
+  $$('[data-pack-choice]', featured).forEach(button => {
+    button.onclick = () => togglePack(button.dataset.packChoice);
+  });
+}
+function rotateFeaturedPacks() {
+  const featured = $('#featuredPacks');
+  if (document.hidden || !$('#matchSettings').open || !featured.checkVisibility()
+      || document.querySelector('dialog[open]') || featured.matches(':hover, :focus-within')) return;
+  const packs = allPacks();
+  const eligible = packs.filter(pack => !featuredIds.includes(pack.id)).map(pack => pack.id);
+  featuredQueue = featuredQueue.filter(id => eligible.includes(id));
+  if (featuredQueue.length < 3) {
+    featuredQueue.push(...shuffle(eligible.filter(id => !featuredQueue.includes(id))));
+  }
+  featuredIds = featuredQueue.splice(0, 3);
+  renderFeaturedPacks(packs);
+}
 function renderPackGrid() {
   const grid = $('#packGrid');
-  grid.innerHTML = allPacks().map(p => `
-    <div class="pack-chip ${S.selected.includes(p.id) ? 'selected' : ''}" data-id="${p.id}">
-      <span class="pc-emoji">${p.emoji}</span>
-      <span><span class="pc-name">${esc(p.name)}</span><br><span class="pc-count">${p.cards.length} kart${p.builtin ? '' : ' · senin'}</span></span>
+  const featured = $('#featuredPacks');
+  const all = allPacks();
+  const query = $('#packSearch').value.trim().toLocaleLowerCase('tr');
+  const focused = document.activeElement?.dataset.packChoice;
+  const fromFeatured = featured.contains(document.activeElement);
+  const packs = query
+    ? all.filter(pack => pack.name.toLocaleLowerCase('tr').includes(query))
+    : all.filter(pack => packCategory === 'all' || categoryForPack(pack) === packCategory);
+  $$('.pack-filters button').forEach(button => {
+    const active = !query && button.dataset.category === packCategory;
+    button.classList.toggle('on', active);
+    button.setAttribute('aria-pressed', String(active));
+  });
+
+  renderFeaturedPacks(all);
+  const visiblePacks = !query && packCategory === 'all' ? packs : packs.slice(0, packLimit);
+  grid.innerHTML = visiblePacks.map(p => `
+    <div class="pack-chip ${S.selected.includes(p.id) ? 'selected' : ''}">
+      <button type="button" class="pack-choice" data-pack-choice="${esc(p.id)}" aria-pressed="${S.selected.includes(p.id)}">
+        <span class="pack-thumb" aria-hidden="true">${packArt(p)}</span>
+        <span><span class="pc-name">${esc(p.name)}</span><br><span class="pc-count">${p.cards.length} kart${p.builtin ? '' : ' · senin'}</span></span>
+      </button>
       <span class="pc-tools">
-        <button class="pc-mini" data-act="edit" title="Düzenle">✏️</button>
-        ${p.builtin ? '' : '<button class="pc-mini" data-act="del" title="Sil">🗑️</button>'}
+        <button type="button" class="pc-mini" data-act="edit" aria-label="${esc(p.name)} paketini düzenle">✏️</button>
+        ${p.builtin ? '' : `<button type="button" class="pc-mini" data-act="del" aria-label="${esc(p.name)} paketini sil">🗑️</button>`}
       </span>
     </div>`).join('');
-  $$('.pack-chip', grid).forEach(ch => {
-    const id = ch.dataset.id;
-    ch.onclick = e => {
-      const btn = e.target.closest('.pc-mini');
-      if (btn) {
-        sfx('click');
-        if (btn.dataset.act === 'edit') openPackEditor(id);
-        if (btn.dataset.act === 'del') deletePack(id);
-        return;
-      }
-      sfx('click');
-      S.selected = S.selected.includes(id) ? S.selected.filter(x => x !== id) : [...S.selected, id];
-      saveSetup();
-      renderPackGrid();
-    };
+  $$('.pack-choice', grid).forEach(button => {
+    button.onclick = () => togglePack(button.dataset.packChoice);
   });
+  $$('.pack-chip', grid).forEach(chip => {
+    const id = $('.pack-choice', chip).dataset.packChoice;
+    $('[data-act="edit"]', chip).onclick = () => { sfx('click'); openPackEditor(id); };
+    const remove = $('[data-act="del"]', chip);
+    if (remove) remove.onclick = () => { sfx('click'); deletePack(id); };
+  });
+  if (focused) $$('[data-pack-choice]', fromFeatured ? featured : grid)
+    .find(button => button.dataset.packChoice === focused)?.focus({ preventScroll: true });
+
+  $('#packCatalogStatus').textContent = packs.length
+    ? packs.length + ' paketten ' + visiblePacks.length + ' tanesi gösteriliyor.'
+    : query ? 'Aramana uyan paket bulunamadı.' : 'Bir kategori seç veya evren ara.';
+  $('#packMore').hidden = packs.length <= visiblePacks.length;
   updatePackSummary();
 }
 function updatePackSummary() {
@@ -474,7 +565,26 @@ function initSetupUI() {
   $('#peCancel').onclick = () => { sfx('click'); $('#packEditor').classList.add('hidden'); };
   $('#peSave').onclick = () => { sfx('click'); savePE(); };
   $('#peReset').onclick = () => { sfx('click'); resetPE(); };
+  $$('.pack-filters button').forEach(button => {
+    button.onclick = () => {
+      packCategory = packCategory === button.dataset.category && !$('#packSearch').value ? '' : button.dataset.category;
+      $('#packSearch').value = '';
+      packLimit = PACK_PAGE_SIZE;
+      renderPackGrid();
+    };
+  });
+  $('#packSearch').oninput = () => {
+    packLimit = PACK_PAGE_SIZE;
+    renderPackGrid();
+  };
+  $('#packMore').onclick = () => {
+    const next = packLimit;
+    packLimit += PACK_PAGE_SIZE;
+    renderPackGrid();
+    $$('.pack-choice', $('#packGrid'))[next]?.focus();
+  };
   renderPackGrid();
+  setInterval(rotateFeaturedPacks, 7000);
 }
 
 /* ============================================================
@@ -710,7 +820,11 @@ function normTr(s) {
 }
 /* kör bid: kartın kimliğini gizleyen ipucu (önce ünlü grup eşleşmesi, sonra genel ipuçları) */
 function blindHintFor(pack, name) {
-  const bd = BLIND_DEFS[pack.id];
+  const role = BUILD_PACKS.find(entry => entry.id === pack.id)?.roles.find(([, ...items]) => items.includes(name));
+  if (role) return role[0] + ' kategorisinden bir kart';
+  const original = CLUB_SELECTIONS.find(selection => selection.id === pack.id);
+  const source = original?.pairs.find(([, ...names]) => names.includes(name));
+  const bd = BLIND_DEFS[source ? source[0] : pack.id];
   const nn = normTr(name);
   if (bd) {
     const hits = (bd.groups || []).filter(g => (g.needles || []).some(nd => {
@@ -742,7 +856,7 @@ function buildDeck(pack) {
     if (src.length < 10) src = shuffle([...pack.cards]).slice(0, 10);
     src.forEach(c => G.usedKeys.add(pack.id + '|' + c.name));
   }
-  const cards = src.map(c => ({ emoji: c.emoji, name: c.name, img: c.img || null, type: 'army', packEmoji: pack.emoji, packName: pack.name, round: G.round }));
+  const cards = src.map(c => ({ emoji: c.emoji, name: c.name, img: c.img || null, type: 'army', packEmoji: pack.emoji, packName: pack.name, packId: pack.id, round: G.round }));
   if (G.cfg.blind) cards.forEach(c => { c.hidden = true; c.hint = blindHintFor(pack, c.name); });
   shuffle(cards);
   return cards;
@@ -1015,7 +1129,12 @@ function groupCards(t) {
   for (let r = 1; r <= G.cfg.rounds; r++) {
     const cards = t.cards.filter(c => c.round === r);
     if (!cards.length) continue;
+    const plan = BUILD_PACKS.find(pack => pack.id === cards[0].packId);
+    const missing = plan?.roles.filter(([, ...items]) =>
+      !cards.some(card => items.includes(card.name))
+    ).map(([role]) => role);
     out.push({
+      missing,
       round: r, emoji: cards[0].packEmoji || '🎴', name: cards[0].packName || '',
       cards: cards.map(c => ({ emoji: c.emoji, name: c.name, img: c.img || null })),
     });
@@ -1103,7 +1222,7 @@ function renderScorebar(s) {
   if (sig === uiScoreSig) return;
   uiScoreSig = sig;
   const total = a + b || 1;
-  const rp = Math.round(a / total * 100);
+  const rp = a + b ? Math.round(a / total * 100) : 50;
   const r = $('#pbRed'), bl = $('#pbBlue'), rb = $('#pbRedBar'), bb = $('#pbBlueBar');
   if (r) r.textContent = a + ' 🎴';
   if (bl) bl.textContent = b + ' 🎴';
@@ -1144,11 +1263,13 @@ function renderCard(s) {
     return;
   }
   const ck = String(card.key) + (card.hidden ? ':h' : ':r');
+  slot.dataset.owner = s.phase === 'reveal' && s.reveal ? String(s.reveal.team) : '';
   if (uiCardKey !== ck) {
+    const uncover = uiCardKey === card.key + ':h' && !card.hidden;
     uiCardKey = ck;
     slot.innerHTML = cardHTML(card, s);
     const el0 = $('.auction-card', slot);
-    if (el0) { void el0.offsetWidth; if (s.phase !== 'dealing') el0.classList.add('flipped'); }
+    if (uncover) el0.classList.add('uncovering');
   }
   const el = $('.auction-card', slot);
   if (!el) return;
@@ -1223,7 +1344,7 @@ function renderBidPanel(s, ba) {
   if (min > max) {
     ba.innerHTML = '<div class="bid-panel p' + team + '">' + common +
       '<div class="bid-note">⚠️ En yüksek teklif <b>$' + top.amount + '</b>, senin bütçen <b>$' + max + '</b> — artıramıyorsun.</div>' +
-      '<div class="bid-actions"><button class="btn ghost" id="bPass">✋ PAS</button></div></div>';
+      '<div class="bid-actions"><button class="btn ghost" id="bPass">Pas</button></div></div>';
     const p0 = $('#bPass', ba);
     if (p0) p0.onclick = () => { sfx('click'); act({ a: 'pass', team: team }); };
     return;
@@ -1231,11 +1352,12 @@ function renderBidPanel(s, ba) {
   /* aynı kart & aynı sıra & aynı min: kullanıcının seçtiği tutarı koru (panel yeniden çizilse bile) */
   const draftOk = bidDraft && s.current && bidDraft.key === s.current.key && bidDraft.team === team && bidDraft.min === min;
   const startVal = draftOk ? clamp(bidDraft.val, min, max) : min;
+  const bidLabel = value => `$${value} teklif ver`;
   ba.innerHTML = '<div class="bid-panel p' + team + '">' + common +
-    '<div class="bid-main"><button class="step" id="bMinus">−</button><div class="bid-num" id="bVal">$' + startVal + '</div><button class="step" id="bPlus">+</button></div>' +
-    '<input type="range" class="bid-slider" id="bRange" min="' + min + '" max="' + max + '" value="' + startVal + '" />' +
+    '<div class="bid-main"><button class="step" id="bMinus" aria-label="Teklifi bir azalt">−</button><div class="bid-num" id="bVal">$' + startVal + '</div><button class="step" id="bPlus" aria-label="Teklifi bir artır">+</button></div>' +
+    '<input type="range" class="bid-slider" id="bRange" aria-label="Teklif tutarı" min="' + min + '" max="' + max + '" value="' + startVal + '" />' +
     '<div class="bid-note">' + (opening ? (giftOpp ? '🎁 Rakibin parası yok — <b>PAS</b> basarsan kart bedavaya onlara gider, teklif verirsen sen kaparsın! ' : '✊ Açılışta pas yok — en az <b>$' + min + '</b> vermelisin! ') : '') + 'Hızlı artış: ' + quickChips(min, max) + ' · Bütçen: <b>$' + max + '</b></div>' +
-    '<div class="bid-actions"><button class="btn primary" id="bBid">' + (opening ? '✊ AÇILIŞI VER' : '🔨 KARŞI ARTIR') + '</button>' + ((opening && !giftOpp) ? '' : '<button class="btn ghost" id="bPass">' + (opening ? '🎁 PAS — rakibe bedava' : '✋ PAS') + '</button>') + '</div></div>';
+    '<div class="bid-actions"><button class="btn primary" id="bBid">' + bidLabel(startVal) + '</button>' + ((opening && !giftOpp) ? '' : '<button class="btn ghost" id="bPass">' + (opening ? '🎁 PAS — rakibe bedava' : 'Pas') + '</button>') + '</div></div>';
   let val = startVal;
   const valEl = $('#bVal', ba), range = $('#bRange', ba);
   const setVal = v => {
@@ -1243,6 +1365,7 @@ function renderBidPanel(s, ba) {
     bidDraft = { key: s.current ? s.current.key : null, team: team, min: min, val: val };
     if (valEl) valEl.textContent = '$' + val;
     if (range) range.value = val;
+    if (bidBtn) bidBtn.textContent = bidLabel(val);
   };
   const minus = $('#bMinus', ba), plus = $('#bPlus', ba);
   if (minus) minus.onclick = () => { sfx('click'); setVal(val - 1); };
@@ -1371,7 +1494,9 @@ function renderEnd(s) {
         g.cards.map(c => '<div class="end-card">' + (c.img
           ? '<img class="ec-img" src="' + esc(c.img) + '" alt="" loading="lazy" data-fb="' + c.emoji + '" data-fb-cls="ec-fb" />'
           : '<span>' + c.emoji + '</span>') + '<span>' + esc(c.name) + '</span></div>').join('') +
-        '</div></div>').join('') || '<div class="end-group"><div class="eg-cards"><small style="color:var(--mut)">kart yok 😅</small></div></div>';
+        '</div>' + (g.missing ? '<p class="plan-summary">' +
+          (g.missing.length ? 'Eksik kalanlar · ' + esc(g.missing.join(' · ')) : 'Plan tamamlandı · 5/5 ihtiyaç') +
+          '</p>' : '') + '</div>').join('') || '<div class="end-group"><div class="eg-cards"><small style="color:var(--mut)">kart yok 😅</small></div></div>';
   }
   const hint = $('#endHint');
   if (hint) hint.textContent = MODE === 'guest' ? '🌐 Online maç: rövanşı host başlatabilir.' : '';
@@ -1508,7 +1633,11 @@ function onNetMessage(m) {
 }
 
 function cfgFromS() {
-  if (!S.selected.length) { toast('⚠️ En az 1 paket seç (Kurulum ekranı)', 'bad'); return null; }
+  if (!S.selected.length) {
+    $('#matchSettings').open = true;
+    toast('En az bir paket seç.', 'bad');
+    return null;
+  }
   return { rounds: S.rounds, roundMoney: S.roundMoney, packIds: [...S.selected], teams: localTeams(), blind: S.mode === 'blind' };
 }
 function localTeams() {
@@ -1530,6 +1659,127 @@ function lobbySetStatus() {
   if (bs) bs.classList.toggle('hidden', !GUEST);
 }
 function broadcastLobby() { if (MODE === 'host' && NET) NET.send({ t: 'state', s: lobbySnap() }); }
+
+function initRoomPackPicker() {
+  const dialog = $('#roomPacks');
+  const jump = $('#roomPackJump');
+  const card = $('#roomPackCard');
+  const image = $('#roomPackImage');
+  const toggle = $('#roomPackToggle');
+  const confirm = $('#roomPacksConfirm');
+  const draft = new Set();
+  let packs = [];
+  let index = 0;
+  let rotation;
+  let rotationTimer;
+  const motion = matchMedia('(prefers-reduced-motion: reduce)');
+
+  function stopRotation() {
+    clearInterval(rotationTimer);
+  }
+
+  function randomNext() {
+    return (index + 1 + rand(packs.length - 1)) % packs.length;
+  }
+
+  function renderChoice(direction = 0) {
+    const pack = packs[index];
+    const selected = draft.has(pack.id);
+    const cover = packCover(pack);
+    jump.value = String(index);
+    $('#roomPackPosition').textContent = (index + 1) + ' / ' + packs.length;
+    $('#roomPackName').textContent = pack.name;
+    $('#roomPackFace').textContent = pack.name;
+    $('#roomPackEmoji').textContent = pack.emoji;
+    $('#roomPackSize').textContent = pack.cards.length + ' kart';
+    const pitch = BUILD_PACKS.find(entry => entry.id === pack.id)?.pitch;
+    $('#roomPackPitch').hidden = !pitch;
+    $('#roomPackPitch').textContent = pitch || '';
+    image.hidden = !cover;
+    if (cover) image.src = cover;
+    for (const [offset, selector] of [[-1, '#roomPackSideLeft'], [1, '#roomPackSideRight']]) {
+      const side = $(selector);
+      const neighbour = packs[(index + offset + packs.length) % packs.length];
+      const art = packCover(neighbour);
+      side.hidden = !art;
+      if (art) side.src = art;
+    }
+    toggle.textContent = selected ? 'Seçimi kaldır' : 'Paketi seç';
+    toggle.setAttribute('aria-pressed', String(selected));
+    card.classList.toggle('is-selected', selected);
+    $('#roomPacksCount').textContent = draft.size + ' paket seçildi';
+    $('#roomPacksSummary').textContent = draft.size
+      ? packs.filter(pack => draft.has(pack.id)).map(pack => pack.name).join(' · ')
+      : 'Oda şu paketle açılacak: ' + pack.name + '.';
+
+    rotation?.cancel();
+    if (direction && !motion.matches) {
+      rotation = card.animate([
+        { transform: 'rotateY(' + (direction * 78) + 'deg) translateZ(-20px)', opacity: .55 },
+        { transform: 'rotateY(-6deg)', opacity: 1 },
+      ], { duration: 420, easing: 'cubic-bezier(.16,1,.3,1)' });
+    }
+  }
+
+  function openPicker(selected = []) {
+    sfx('click');
+    packs = allPacks();
+    const first = packs.findIndex(pack => pack.id === selected[0]);
+    index = first < 0 ? rand(packs.length) : first;
+    draft.clear();
+    selected.forEach(id => draft.add(id));
+    jump.replaceChildren(...packs.map((pack, i) => new Option(pack.name, String(i))));
+    dialog.showModal();
+    renderChoice(1);
+    $('#roomPacksClose').focus();
+    stopRotation();
+    if (!draft.size && !motion.matches && packs.length > 1) {
+      rotationTimer = setInterval(() => {
+        if (!dialog.open || document.hidden || motion.matches) return;
+        index = randomNext();
+        renderChoice(1);
+      }, 4300);
+    }
+  }
+  $('#btnHost').onclick = () => openPicker();
+  $('#btnCatalogHost').onclick = () => openPicker(S.selected);
+  dialog.addEventListener('close', stopRotation);
+  for (const controls of $$('.room-pack-controls, .room-packs-footer', dialog)) {
+    controls.addEventListener('pointerdown', stopRotation);
+    controls.addEventListener('focusin', stopRotation);
+  }
+
+  function step(direction) {
+    stopRotation();
+    index = (index + direction + packs.length) % packs.length;
+    renderChoice(direction);
+  }
+
+  $('#roomPackPrev').onclick = () => step(-1);
+  $('#roomPackNext').onclick = () => step(1);
+  jump.onchange = () => {
+    stopRotation();
+    const next = Number(jump.value);
+    const direction = Math.sign(next - index);
+    index = next;
+    renderChoice(direction);
+  };
+  image.onerror = () => { image.hidden = true; };
+  toggle.onclick = () => {
+    stopRotation();
+    const id = packs[index].id;
+    if (draft.has(id)) draft.delete(id);
+    else draft.add(id);
+    renderChoice();
+  };
+  $('#roomPacksClose').onclick = () => dialog.close();
+  confirm.onclick = () => {
+    S.selected = draft.size ? [...draft] : [packs[index].id];
+    renderPackGrid();
+    dialog.close();
+    hostRoom();
+  };
+}
 
 async function hostRoom() {
   const cfg = cfgFromS();
@@ -1682,7 +1932,79 @@ function fallbackCopy(t, ok) {
   } catch (e) { toast('📋 Oda kodu: <b>' + t + '</b>', 'gold'); }
 }
 
+function initCardInteractions() {
+  const table = $('#previewTable');
+  const button = $('#previewDraw');
+  const image = $('#previewImage');
+  const title = $('#previewTitle');
+  const caption = $('#previewCaption');
+  const examples = [
+    ['onepiece', 'Luffy'], ['naruto', 'Naruto'], ['titan', 'Levi'],
+    ['jujutsu', 'Gojo'], ['dragonball', 'Goku'], ['bleach', 'Ichigo'],
+    ['demonslayer', 'Tanjiro'], ['hxh', 'Gon'], ['mha', 'Deku'],
+    ['csm', 'Denji'], ['blackclover', 'Asta'], ['opm', 'Saitama'],
+    ['sao', 'Kirito'], ['onepiece', 'Zoro'],
+  ].map(([packId, name]) => {
+    const pack = PACK_DEFS.find(pack => pack.id === packId);
+    return { pack: pack.name, card: pack.cards.find(card => card[1] === name) };
+  });
+  let index = 0;
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  let timer;
+
+  function schedulePreview(delay = 4000) {
+    clearTimeout(timer);
+    if (document.hidden) return;
+    timer = setTimeout(() => {
+      if (curScreen !== 'setup' || document.querySelector('dialog[open]')) {
+        schedulePreview();
+        return;
+      }
+      drawPreview();
+      schedulePreview();
+    }, delay);
+  }
+  function drawPreview() {
+    const { pack, card } = examples[index];
+    index = (index + 1) % examples.length;
+    image.src = card[3];
+    title.textContent = card[1];
+    caption.textContent = card[1] + ' · ' + pack;
+    button.setAttribute('aria-label', 'Sıradaki örnek kartı aç');
+    const wasOpen = button.classList.contains('is-open');
+    button.classList.add('is-open');
+    if (wasOpen && !reduced.matches) {
+      const inner = $('.preview-inner', button);
+      inner.getAnimations().forEach(animation => animation.cancel());
+      inner.animate(
+        [{ transform: 'rotateY(20deg)' }, { transform: 'rotateY(180deg)' }],
+        { duration: 440, easing: 'cubic-bezier(.16,1,.3,1)' }
+      );
+    }
+  }
+  button.onclick = () => {
+    drawPreview();
+    schedulePreview();
+  };
+  document.addEventListener('visibilitychange', () => schedulePreview());
+  schedulePreview(1200);
+
+  for (const surface of [table, $('#cardSlot')]) {
+    surface.addEventListener('pointermove', event => {
+      if (event.pointerType !== 'mouse' || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const bounds = surface.getBoundingClientRect();
+      surface.style.setProperty('--tilt-x', (0.5 - (event.clientY - bounds.top) / bounds.height) * 14 + 'deg');
+      surface.style.setProperty('--tilt-y', ((event.clientX - bounds.left) / bounds.width - 0.5) * 20 + 'deg');
+    });
+    surface.addEventListener('pointerleave', () => {
+      surface.style.removeProperty('--tilt-x');
+      surface.style.removeProperty('--tilt-y');
+    });
+  }
+}
+
 function init() {
+  initCardInteractions();
   loadSetup();
   initSetupUI();
   /* Foto yüklenemezse otomatik emoji'ye düş */
@@ -1707,8 +2029,7 @@ function init() {
     MODE = 'local'; MY_TEAM = null;
     beginMatch(cfg);
   };
-  const host = $('#btnHost');
-  if (host) host.onclick = () => { sfx('click'); hostRoom(); };
+  initRoomPackPicker();
   const join = $('#btnJoin');
   if (join) join.onclick = () => { sfx('click'); openJoinRoom(); };
   const jg = $('#btnJoinGo');

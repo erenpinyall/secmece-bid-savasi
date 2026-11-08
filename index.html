@@ -3,35 +3,62 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>SEÇMECE ⚔️ Takım Savaşı</title>
+<title>Seçmece</title>
 <meta name="description" content="Açık artırma savaşı: Terminatör mü, Aslan mı? Kartları kap, takımını kur, 2 cihazdan oyna!" />
-<meta name="theme-color" content="#ffffff" />
+<meta name="theme-color" content="#101722" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <!-- Font yüklenemez/yavaşlarsa sayfa BEKLEMESİN: preload + onload ile render-blocking değil -->
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&display=swap" /></noscript>
-<link rel="stylesheet" href="styles.css" />
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" /></noscript>
+<link rel="stylesheet" href="styles.css?v=6-rotating-covers" />
 </head>
 <body>
-  <div class="bg" aria-hidden="true">
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="orb orb-3"></div>
-  </div>
   <div id="confetti-layer" aria-hidden="true"></div>
   <div id="toasts" class="toasts"></div>
 
   <!-- ================= KURULUM ================= -->
   <section id="screen-setup" class="screen active">
-    <header class="hero">
-      <div class="hero-badge">KARŞILIKLI TEKLİF · 2 CİHAZ DESTEKLİ</div>
-      <h1 class="hero-title">SEÇ<span>MECE</span></h1>
-      <p class="hero-sub">Kart gelir, teklifi görürsün, üstüne artırırsın ya da pas dersin.<br>Her turda takım başına en fazla <b>5 kart</b> — tur bitince sayaç sıfırlanır! 🎴<br><small>🎭 <b>Kör Bid</b> modu: kartlar gizli, sadece ipucu! · 📦 Dev kadrolardan her tur <b>rastgele 10 kart</b> ✨</small></p>
-      <button class="btn ghost small" id="btnRules1">❓ Nasıl oynanır?</button>
+    <header class="club-header">
+      <span>SEÇMECE</span>
+      <button class="btn ghost small" id="btnRules1">Nasıl oynanır?</button>
     </header>
+    <div class="hero club-hero">
+      <div class="club-intro">
+        <h1 class="hero-title">Kartlar<br>masada<span>.</span></h1>
+        <p class="hero-sub">Arkadaşını çağır, teklifini ver ve kendi kadronu kur.</p>
+      <div class="start-actions">
+        <button id="btnHost" class="btn primary big">Oda kur</button>
+        <button id="btnJoin" class="btn ghost big">Odaya katıl</button>
+        <button id="btnStart" class="btn ghost">Tek cihazda oyna</button>
+      </div>
+      </div>
+      <div class="club-showcase">
+        <div class="club-table" id="previewTable">
+          <div class="club-deck deck-back" aria-hidden="true"><span>SEÇMECE</span></div>
+          <div class="club-deck deck-side" aria-hidden="true"><span>SEÇMECE</span></div>
+          <button class="preview-card" type="button" id="previewDraw" aria-label="Örnek kartı aç">
+            <span class="preview-inner" aria-hidden="true">
+              <span class="preview-face preview-back">
+                <span>SEÇMECE</span>
+                <svg viewBox="0 0 100 100"><path d="M50 4 84 50 50 96 16 50Z M50 23 70 50 50 77 30 50Z M50 4V23 M84 50H70 M50 96V77 M16 50H30" /></svg>
+                <span>ANİME DESTESİ</span>
+              </span>
+              <span class="preview-face preview-front">
+                <img id="previewImage" src="img/onepiece/luffy-official.jpg" alt="" />
+                <span class="preview-title" id="previewTitle"></span>
+              </span>
+            </span>
+          </button>
+        </div>
+        <div class="preview-playback">
+          <p class="preview-caption" id="previewCaption">Anime destesi</p>
+        </div>
+      </div>
+    </div>
 
-    <div class="glass setup-panel">
+    <details class="setup-panel" id="matchSettings">
+      <summary>Maç ayarları ve paketler</summary>
       <h2 class="sec-title">👥 Takımlar <small class="sec-note">(tek cihazda oynuyorsanız ikisini de doldurun — online'da herkes kendi adını kendi cihazında yazar)</small></h2>
       <div class="team-setup">
         <div class="team-card red">
@@ -78,20 +105,38 @@
         <h2 class="sec-title">🎯 Evren Paketleri</h2>
         <div class="setup-actions">
           <button id="btnNewPack" class="btn ghost small">➕ Yeni Paket Yarat</button>
-          <button id="btnAllPacks" class="btn ghost small">Tümünü Seç</button>
-          <button id="btnNoPacks" class="btn ghost small">Hiçbiri</button>
         </div>
       </div>
-      <div class="pack-grid" id="packGrid"></div>
-      <p class="setup-hint" id="packSummary"></p>
-
-      <div class="start-actions">
-        <button id="btnStart" class="btn primary big">📱 TEK CİHAZDA BAŞLAT</button>
-        <button id="btnHost" class="btn ghost big">🌐 ODA KUR <small>(2 cihaz)</small></button>
-        <button id="btnJoin" class="btn ghost big">🔑 ODAYA KATIL</button>
+      <h3 class="catalog-heading">Öne Çıkanlar</h3>
+      <div id="featuredPacks" class="featured-packs"></div>
+      <div class="catalog-head">
+        <h3 class="catalog-heading">Tüm Evrenler</h3>
+        <input id="packSearch" type="search" aria-label="Evren ara" placeholder="Evren ara…" />
       </div>
-      <p class="setup-hint">Online modda arkadaşın kendi telefonundan/bilgisayarından odaya katılır — teklifleri canlı görür, karşılıklı artırırsınız.</p>
-    </div>
+      <div class="pack-filters" aria-label="Paket kategorileri">
+        <button type="button" class="mode-btn" data-category="all" aria-pressed="false">Tümü</button>
+        <button type="button" class="mode-btn" data-category="anime" aria-pressed="false">Anime</button>
+        <button type="button" class="mode-btn" data-category="football" aria-pressed="false">Futbol</button>
+        <button type="button" class="mode-btn" data-category="games" aria-pressed="false">Oyun</button>
+        <button type="button" class="mode-btn" data-category="club" aria-pressed="false">Kulüp seçkileri</button>
+        <button type="button" class="mode-btn" data-category="build" aria-pressed="false">Senaryolar</button>
+        <button type="button" class="mode-btn" data-category="other" aria-pressed="false">Diğer</button>
+      </div>
+      <div class="pack-grid" id="packGrid"></div>
+      <p id="packCatalogStatus" class="catalog-status" aria-live="polite"></p>
+      <button type="button" id="packMore" class="btn ghost small" hidden>Daha fazla göster</button>
+      <details class="catalog-bulk">
+        <summary>Toplu seçim</summary>
+        <button id="btnAllPacks" class="btn ghost small">Tümünü seç</button>
+        <button id="btnNoPacks" class="btn ghost small">Seçimleri temizle</button>
+      </details>
+      <div class="catalog-footer">
+        <p class="setup-hint" id="packSummary" aria-live="polite"></p>
+        <button type="button" id="btnCatalogHost" class="btn primary">Odayı kur</button>
+      </div>
+
+
+    </details>
   </section>
 
   <!-- ================= OYUN ================= -->
@@ -122,10 +167,10 @@
         <div class="bid-area" id="bidArea"></div>
         <div class="reveal-area" id="revealArea"></div>
       </div>
-      <aside class="log glass">
-        <h3>📜 Tur Kaydı</h3>
+      <details class="log glass">
+        <summary>Tur kaydı</summary>
         <div id="logList"></div>
-      </aside>
+      </details>
     </div>
   </section>
 
@@ -184,6 +229,48 @@
   </div>
 
   <!-- ================= LOBI (ODA) ================= -->
+  <dialog id="roomPacks" class="room-packs" aria-labelledby="roomPacksTitle">
+    <header class="room-packs-header">
+      <h2 id="roomPacksTitle">Masaya hangi evrenler gelsin?</h2>
+      <button type="button" class="btn ghost small" id="roomPacksClose">Vazgeç</button>
+    </header>
+    <div class="room-packs-layout">
+      <div class="room-pack-stage" aria-hidden="true">
+        <div class="room-podium"></div>
+        <div class="room-podium room-podium-top"></div>
+        <div class="room-pack-orbit room-pack-orbit-left"><img id="roomPackSideLeft" alt="" /></div>
+        <div class="room-pack-orbit room-pack-orbit-right"><img id="roomPackSideRight" alt="" /></div>
+        <div class="room-pack-hover">
+        <div class="room-pack-card" id="roomPackCard" aria-hidden="true">
+          <img id="roomPackImage" src="img/onepiece/luffy-official.jpg" alt="" />
+          <span id="roomPackEmoji"></span>
+          <strong id="roomPackFace"></strong>
+        </div>
+        </div>
+      </div>
+      <div class="room-pack-controls">
+        <label for="roomPackJump">Evrene git</label>
+        <select id="roomPackJump"></select>
+        <div class="room-pack-nav">
+          <button type="button" class="btn ghost" id="roomPackPrev" aria-label="Önceki paket">‹</button>
+          <span id="roomPackPosition"></span>
+          <button type="button" class="btn ghost" id="roomPackNext" aria-label="Sonraki paket">›</button>
+        </div>
+        <h3 id="roomPackName"></h3>
+        <p id="roomPackSize"></p>
+        <p id="roomPackPitch" hidden></p>
+        <button type="button" class="btn ghost" id="roomPackToggle" aria-pressed="false">Paketi seç</button>
+      </div>
+    </div>
+    <footer class="room-packs-footer">
+      <div>
+        <strong id="roomPacksCount" aria-live="polite"></strong>
+        <p id="roomPacksSummary"></p>
+      </div>
+      <button type="button" class="btn primary" id="roomPacksConfirm">Odayı kur</button>
+    </footer>
+  </dialog>
+
   <div id="lobby" class="overlay hidden">
     <div class="overlay-box glass center">
       <h2 id="lobbyTitle">🌐 Oda</h2>
@@ -268,9 +355,9 @@
     </div>
   </div>
 
-  <script src="packs.js"></script>
+  <script src="packs.js?v=6-restored"></script>
   <!-- mqtt.min.js (340 KB) artık sadece online oda açılırken yüklenir -->
   <script src="net.js"></script>
-  <script src="app.js"></script>
+  <script src="app.js?v=6-scenario-photos"></script>
 </body>
 </html>
